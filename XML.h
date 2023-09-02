@@ -9,16 +9,14 @@ class XML
 {
 private:
 
-	const string NAME_OF_USER_XML;
-
-	bool isUserXMLEmpty();
+	const string NAME_OF_XML;
 
 public:
 	
-	XML(string nameOfUserXML) :
-		NAME_OF_USER_XML(nameOfUserXML) {};
+	XML(string nameOfXML) :
+		NAME_OF_XML(nameOfXML) {};
 	
-	vector<User> uploadUsersFromXML();
-	void appendUserToXML(User user);
+	string getFileName();
+	//bool isFileEmpty();
 };
 

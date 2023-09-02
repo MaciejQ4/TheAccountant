@@ -42,7 +42,7 @@ void UserManager::createUser() {
     system("cls");
     User user = gatherCredentialsOfNewUser();
     users.push_back(user);
-    xml.appendUserToXML(user);
+    userXML.appendUserToXML(user);
     cout << "User added succesfully. "; system("pause");
 }
 

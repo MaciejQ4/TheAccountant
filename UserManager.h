@@ -2,6 +2,7 @@
 
 #include "User.h"
 #include "XML.h"
+#include "UserXML.h"
 
 class UserManager
 {
@@ -9,7 +10,7 @@ private:
 
 	int loggedID = 0;
 	vector <User> users;
-	XML xml;
+	UserXML userXML;
 
 	User gatherCredentialsOfNewUser();
 	int assignIDtoNewUser();
@@ -17,10 +18,10 @@ private:
 
 public:
 
-	UserManager(string nameOfUserXML) :
-		xml(nameOfUserXML)
+	UserManager(string NAME_OF_USER_XML) :
+		userXML(NAME_OF_USER_XML)
 	{
-		users = xml.uploadUsersFromXML();
+		users = userXML.uploadUsersFromXML();
 	};
 	
 	int getLoggedID();

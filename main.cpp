@@ -9,7 +9,7 @@ using namespace std;
 int main()
 {
     std::cout << "Hello World!\n";
-    Accountant accountant("outputxml");
+    Accountant accountant("users");
 
     while (true) {
 
@@ -28,7 +28,7 @@ int main()
         case '1': accountant.createUser();              break;
         case '2': accountant.loginUser();               break;
         case '3': accountant.showAllUsers();            break;
-        case '4': exit(0);                              break;
+        case '9': exit(0);                              break;
 
         default: cout << "Wrong input. "; system("pause");
         }

@@ -37,21 +37,35 @@ void Accountant::showCurrentTime() {
 	else {
 		std::cout << "Error getting current time.";
 	}
-
+	cout << timeInfo.tm_mon;
+	int a = timeInfo.tm_hour;
+	cout << a;
 	system("pause");
 }
 
 void Accountant::calculateTimeDifference() {
 	std::tm start{}, end{};
 
-	cout << "Enter start date (YYYY MM DD): ";
-	cin >> std::get_time(&start, "%Y %m %d");
-
-	cout << "Enter end date (YYYY MM DD): ";
-	cin >> std::get_time(&end, "%Y %m %d");
+	cout << "Enter start date (YYYY-MM-DD): ";
+	cin >> std::get_time(&start, "%Y-%m-%d");
 
 	if (cin.fail()) {
-		cout << "Invalid input format. "; system("pause");
+		cout << "Invalid start date format. ";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		system("pause");
+		return;
+	}
+
+
+	cout << "Enter end date (YYYY-MM-DD): ";
+	cin >> std::get_time(&end, "%Y-%m-%d");
+
+	if (cin.fail()) {
+		cout << "Invalid end date format. ";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		system("pause");
 		return;
 	}
 
