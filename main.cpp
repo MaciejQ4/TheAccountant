@@ -9,7 +9,7 @@ using namespace std;
 int main()
 {
     std::cout << "Hello World!\n";
-    Accountant accountant("users");
+    Accountant accountant("users", "incomes", "expenses");
 
     while (true) {
 
@@ -41,12 +41,17 @@ int main()
             cout << "1. Date and time right now" << endl;
             cout << "2. Calculate elapsed time between two dates" << endl;
             cout << "3. Current months number of days" << endl;
+            cout << "4. create expense" << endl;
+            cout << "5. show expenses" << endl;
             char choice = AuxillaryFunctions::readChar();
             switch (choice) {
 
             case '1': accountant.showCurrentTime();         break;
             case '2': accountant.calculateTimeDifference(); break;
             case '3': accountant.howManyDays();             break;
+            case '4': accountant.createTransaction();             break;
+            case '5': accountant.showTransactions();             break;
+          
 
             default: cout << "Wrong input. "; system("pause");
             }

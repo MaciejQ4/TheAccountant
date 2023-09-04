@@ -13,6 +13,9 @@ void Accountant::createUser() {
 void Accountant::loginUser() {
 
 	userManager.loginUser();
+	if (userManager.isUserLogged()) {
+		operationManager = new OperationManager(NAME_OF_INCOME_XML, NAME_OF_EXPENSE_XML, userManager.getLoggedID());
+	}
 }
 
 void Accountant::showAllUsers() {
@@ -113,4 +116,14 @@ void Accountant::howManyDays() {
 	}
 	cout << days << endl;
 	system("pause");
+}
+
+void Accountant::createTransaction()
+{
+	operationManager->addTransaction();
+}
+
+void Accountant::showTransactions()
+{
+	operationManager->showTransactions();
 }
