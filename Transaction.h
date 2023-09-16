@@ -12,11 +12,11 @@ class Transaction
 	int userID;
 	int date;
 	string item;
-	int amount;
+	float amount;
 
 public:
 
-	Transaction(int transactionID = 0, int userID = 0, int date = 0, string item = "", int amount = 0)
+	Transaction(int transactionID = 0, int userID = 0, int date = 0, string item = "", float amount = 0)
 	{
 		this->transactionID = transactionID;
 		this->userID = userID;
@@ -29,13 +29,13 @@ public:
 	int getUserID();
 	int getDate();
 	string getItem();
-	int getAmount();
+	float getAmount();
 
 	void setTransactionID(int newID);
 	void setUserID(int newID);
 	void setDate(int newDate);
 	void setItem(string newItem);
-	void setAmount(int newAmount);
+	void setAmount(float newAmount);
 
 };
 

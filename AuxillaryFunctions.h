@@ -14,5 +14,7 @@ public:
 
 	static string readLine();
 	static char readChar();
+	static string addDashToDate(int date);
+	static int eraseDashFromDate(string date);
 };
 

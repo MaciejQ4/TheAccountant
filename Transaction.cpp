@@ -20,7 +20,7 @@ string Transaction::getItem() {
 	return item;
 }
 
-int Transaction::getAmount() {
+float Transaction::getAmount() {
 
 	return amount;
 }
@@ -46,7 +46,7 @@ void Transaction::setItem(string newItem) {
 	item = newItem;
 }
 
-void Transaction::setAmount(int newAmount) {
+void Transaction::setAmount(float newAmount) {
 
 	amount = newAmount;
 }

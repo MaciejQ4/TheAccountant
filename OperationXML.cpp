@@ -1,82 +1,161 @@
 #include "OperationXML.h"
 
-int OperationXML::getIDofLastTransaction() {
+int OperationXML::getIDofLastIncome() {
 
-    return IDofLastTransaction;
+    return IDofLastIncome;
 }
 
-vector<Transaction> OperationXML::uploadTransactionsFromXML(int LOGGED_ID)
+int OperationXML::getIDofLastExpense()
 {
-    vector<Transaction> trancactions;
+    return IDofLastExpense;
+}
+
+vector<Income> OperationXML::uploadIncomesFromXML(int LOGGED_ID, int startDate, int endDate)
+{
+    vector<Income> incomes;
     TiXmlDocument doc;
 
     if (doc.LoadFile(getFileName().c_str())) {
         TiXmlElement* root = doc.RootElement();
         if (!root) {
-            std::cout << "Error: Root element not found in Expense XML." << std::endl;
-            return trancactions;
+            std::cout << "Error: Root element not found in Income XML." << std::endl;
+            return incomes;
         }
 
-        for (TiXmlElement* ExpenseElement = root->FirstChildElement("Expense"); ExpenseElement; ExpenseElement = ExpenseElement->NextSiblingElement("Expense")) {
+        for (TiXmlElement* TransactionElement = root->FirstChildElement("Transaction"); TransactionElement; TransactionElement = TransactionElement->NextSiblingElement("Transaction")) {
             int TransactionID = 0;
             int userID = 0;
             int date = 0;
             string item = "";
-            int amount = 0;
+            float amount = 0;
 
-            TiXmlElement* ExpenseIDElement = ExpenseElement->FirstChildElement("ExpenseID");
-            if (ExpenseIDElement) {
-                const char* ExpenseIDText = ExpenseIDElement->GetText();
-                if (ExpenseIDText)
-                    TransactionID = std::stoi(ExpenseIDText);
+            TiXmlElement* TransactionIDElement = TransactionElement->FirstChildElement("TransactionID");
+            if (TransactionIDElement) {
+                const char* IncomeIDText = TransactionIDElement->GetText();
+                if (IncomeIDText)
+                    TransactionID = std::stoi(IncomeIDText);
             }
 
-            TiXmlElement* userIDElement_Expense = ExpenseElement->FirstChildElement("UserID");
-            if (userIDElement_Expense) {
-                const char* UserIDText = userIDElement_Expense->GetText();
+            TiXmlElement* userIDElement = TransactionElement->FirstChildElement("UserID");
+            if (userIDElement) {
+                const char* UserIDText = userIDElement->GetText();
                 if (UserIDText)
                     userID = stoi(UserIDText);
             }
 
-            TiXmlElement* DateElement_Expense = ExpenseElement->FirstChildElement("Date");
-            if (DateElement_Expense) {
-                const char* DateText = DateElement_Expense->GetText();
+            TiXmlElement* DateElement = TransactionElement->FirstChildElement("Date");
+            if (DateElement) {
+                const char* DateText = DateElement->GetText();
                 if (DateText)
                     date = stoi(DateText);
             }
 
-            TiXmlElement* ItemElement_Expense = ExpenseElement->FirstChildElement("Item");
-            if (ItemElement_Expense) {
-                const char* ItemText_Expense = ItemElement_Expense->GetText();
-                if (ItemText_Expense)
-                    item = ItemText_Expense;
+            TiXmlElement* ItemElement = TransactionElement->FirstChildElement("Item");
+            if (ItemElement) {
+                const char* ItemText = ItemElement->GetText();
+                if (ItemText)
+                    item = ItemText;
             }
 
-            TiXmlElement* AmountElement_Expense = ExpenseElement->FirstChildElement("Amount");
-            if (AmountElement_Expense) {
-                const char* AmountText = AmountElement_Expense->GetText();
+            TiXmlElement* AmountElement = TransactionElement->FirstChildElement("Amount");
+            if (AmountElement) {
+                const char* AmountText = AmountElement->GetText();
                 if (AmountText)
-                    amount = stoi(AmountText);
+                    amount = stof(AmountText);
             }
 
-            if (TransactionID > IDofLastTransaction) IDofLastTransaction = TransactionID;
+            if (TransactionID > IDofLastIncome) IDofLastIncome = TransactionID;
             
             if (userID == LOGGED_ID) {
-                Transaction transaction;
+                Income transaction;
                 transaction.setTransactionID(TransactionID);
                 transaction.setUserID(userID);
                 transaction.setDate(date);
                 transaction.setItem(item);
                 transaction.setAmount(amount);
 
-                trancactions.push_back(transaction);
+                incomes.push_back(transaction);
                 }
+        }
+    }
+    else {
+        std::cout << "Error loading Income XML file." << std::endl;
+    }
+    return incomes;
+}
+
+vector<Expense> OperationXML::uploadExpensesFromXML(int LOGGED_ID, int startDate, int endDate)
+{
+    vector<Expense> expenses;
+    TiXmlDocument doc;
+
+    if (doc.LoadFile(getFileName().c_str())) {
+        TiXmlElement* root = doc.RootElement();
+        if (!root) {
+            std::cout << "Error: Root element not found in Expense XML." << std::endl;
+            return expenses;
+        }
+
+        for (TiXmlElement* TransactionElement = root->FirstChildElement("Expense"); TransactionElement; TransactionElement = TransactionElement->NextSiblingElement("Expense")) {
+            int TransactionID = 0;
+            int userID = 0;
+            int date = 0;
+            string item = "";
+            float amount = 0;
+
+            TiXmlElement* TransactionIDElement = TransactionElement->FirstChildElement("ExpenseID");
+            if (TransactionIDElement) {
+                const char* ExpenseIDText = TransactionIDElement->GetText();
+                if (ExpenseIDText)
+                    TransactionID = std::stoi(ExpenseIDText);
+            }
+
+            TiXmlElement* userIDElement = TransactionElement->FirstChildElement("UserID");
+            if (userIDElement) {
+                const char* UserIDText = userIDElement->GetText();
+                if (UserIDText)
+                    userID = stoi(UserIDText);
+            }
+
+            TiXmlElement* DateElement = TransactionElement->FirstChildElement("Date");
+            if (DateElement) {
+                const char* DateText = DateElement->GetText();
+                if (DateText)
+                    date = stoi(DateText);
+            }
+
+            TiXmlElement* ItemElement = TransactionElement->FirstChildElement("Item");
+            if (ItemElement) {
+                const char* ItemText = ItemElement->GetText();
+                if (ItemText)
+                    item = ItemText;
+            }
+
+            TiXmlElement* AmountElement = TransactionElement->FirstChildElement("Amount");
+            if (AmountElement) {
+                const char* AmountText = AmountElement->GetText();
+                if (AmountText)
+                    amount = stof(AmountText);
+            }
+
+            if (TransactionID > IDofLastExpense) IDofLastExpense = TransactionID;
+
+            if (userID == LOGGED_ID) {
+                Expense transaction;
+                transaction.setTransactionID(TransactionID);
+                transaction.setUserID(userID);
+                transaction.setDate(date);
+                transaction.setItem(item);
+                transaction.setAmount(amount);
+
+                expenses.push_back(transaction);
+            }
         }
     }
     else {
         std::cout << "Error loading Expense XML file." << std::endl;
     }
-    return trancactions;
+    return expenses;
 }
 
 void OperationXML::appendTransactionToXML(Transaction transaction)
@@ -111,17 +190,17 @@ void OperationXML::appendTransactionToXML(Transaction transaction)
         TransactionElement->LinkEndChild(AmountElement_Expense);
 
         doc.SaveFile(getFileName().c_str());
-        IDofLastTransaction++;
+        IDofLastIncome++;
     }
     else
     {
-        TiXmlElement* root = new TiXmlElement("Expenses");
+        TiXmlElement* root = new TiXmlElement("Transactions");
         doc.LinkEndChild(root);
 
-        TiXmlElement* TransactionElement = new TiXmlElement("Expense");
+        TiXmlElement* TransactionElement = new TiXmlElement("Transaction");
         root->LinkEndChild(TransactionElement);
 
-        TiXmlElement* expenseIDElement_Expense = new TiXmlElement("ExpenseID");
+        TiXmlElement* expenseIDElement_Expense = new TiXmlElement("TransactionID");
         expenseIDElement_Expense->LinkEndChild(new TiXmlText(std::to_string(transaction.getTransactionID()).c_str()));
         TransactionElement->LinkEndChild(expenseIDElement_Expense);
 
@@ -142,6 +221,6 @@ void OperationXML::appendTransactionToXML(Transaction transaction)
         TransactionElement->LinkEndChild(AmountElement_Expense);
 
         doc.SaveFile(getFileName().c_str());
-        IDofLastTransaction++;
+        IDofLastIncome++;
     }
 }

@@ -41,16 +41,23 @@ int main()
             cout << "1. Date and time right now" << endl;
             cout << "2. Calculate elapsed time between two dates" << endl;
             cout << "3. Current months number of days" << endl;
-            cout << "4. create expense" << endl;
-            cout << "5. show expenses" << endl;
+            cout << "4. create income" << endl;
+            cout << "5. show incomes" << endl;
+            cout << "6. create expense" << endl;
+            cout << "7. show expenses" << endl;
+            cout << "8. show this months balance" << endl;
+
             char choice = AuxillaryFunctions::readChar();
             switch (choice) {
 
             case '1': accountant.showCurrentTime();         break;
             case '2': accountant.calculateTimeDifference(); break;
             case '3': accountant.howManyDays();             break;
-            case '4': accountant.createTransaction();             break;
-            case '5': accountant.showTransactions();             break;
+            case '4': accountant.createIncome();            break;
+            case '5': accountant.showIncomes();             break;
+            case '6': accountant.createExpense();            break;
+            case '7': accountant.showExpenses();             break;
+            case '8': accountant.showBalance();             break;
           
 
             default: cout << "Wrong input. "; system("pause");

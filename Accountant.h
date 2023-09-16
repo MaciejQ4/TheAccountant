@@ -4,10 +4,6 @@
 #include "OperationManager.h"
 #include "AuxillaryFunctions.h"
 
-#include <ctime>
-#include <time.h>
-#include <iomanip>
-#include <chrono>
 
 class Accountant
 {
@@ -36,7 +32,11 @@ public:
 	void calculateTimeDifference();
 	void howManyDays();
 
-	void createTransaction();
-	void showTransactions();
+	void createIncome();
+	void showIncomes();
+
+	void createExpense();
+	void showExpenses();
+	void showBalance();
 };
 
