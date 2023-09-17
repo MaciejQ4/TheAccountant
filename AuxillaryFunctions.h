@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
+#include "Transaction.h"
 
 using namespace std;
 

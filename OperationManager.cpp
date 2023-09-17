@@ -93,8 +93,6 @@ void OperationManager::addExpense()
     Expense expense = gatherExpenseInfo();
     expenses.push_back(expense);
     expenseXML.appendTransactionToXML(expense);
-    cout << "Expense added succesfully. ";
-	system("pause");
 }
 
 Income OperationManager::gatherIncomeInfo() {
@@ -170,20 +168,73 @@ Income OperationManager::gatherIncomeInfo() {
 
 Expense OperationManager::gatherExpenseInfo() {
 
-    Expense expense;
-    expense.setTransactionID(expenseXML.getIDofLastIncome() + 1);
-    expense.setUserID(LOGGED_ID);
-    expense.setDate(LOGGED_ID);
+	Expense expense;
 
-    cout << "Enter item: " << endl;
-    string itemInput = AuxillaryFunctions::readLine();
-    expense.setItem(itemInput);
+	expense.setTransactionID(expenseXML.getIDofLastExpense() + 1);
+	expense.setUserID(LOGGED_ID);
 
-    cout << "Enter amount: " << endl;
-    float amountInput = stof(AuxillaryFunctions::readLine());
-    expense.setAmount(amountInput);
+	system("cls");
+	string itemInput = "";
+	cout << "Enter item: " << endl;
+	itemInput = AuxillaryFunctions::readLine();
+	expense.setItem(itemInput);
 
-    return expense;
+	string inputAmount = "";
+	do {
+		cout << "Enter amount: " << endl;
+		inputAmount = AuxillaryFunctions::readLine();
+
+	} while (!(checkAmountFormat(inputAmount)));
+
+
+	for (size_t i = 0; i < inputAmount.size(); i++) {      // change comma to dot
+		if (inputAmount[i] == ',') inputAmount[i] = '.';
+	}
+
+	float amount = stof(inputAmount);
+
+	auto roundToTwoDecimalPlaces = [](float value) {
+		return roundf(value * 100) / 100.0f;				// Rounds to two decimal places
+	};
+
+	float amountRounded = roundToTwoDecimalPlaces(amount);
+	expense.setAmount(amountRounded);
+
+	char dayChoice;
+	bool flag = true;
+	do {
+		//system("cls");
+		cout << "Add transaction with today's date? (Select 'Y' or 'N')" << endl;
+		dayChoice = AuxillaryFunctions::readChar();
+
+		if (dayChoice == 'Y' || dayChoice == 'y') {
+			expense.setDate(getTodaysDate());
+			cout << "Transaction added succesfully with today's date. ";
+			system("pause");
+			flag = false;
+		}
+
+		else if (dayChoice == 'N' || dayChoice == 'n') {
+
+			string inputDate;
+			do {
+				cout << "Enter requested date of transaction in format: YYYY-MM-DD: " << endl;
+				inputDate = AuxillaryFunctions::readLine();
+
+			} while (!(checkDateFormat(inputDate)));
+
+			int date = AuxillaryFunctions::eraseDashFromDate(inputDate);
+
+			expense.setDate(date);
+			cout << "Transaction added succesfully with provided date. ";
+			system("pause");
+			flag = false;
+		}
+		else cout << "Wrong input. Please select Y or N. " << endl;
+
+	} while (flag);
+
+	return expense;
 }
 
 void OperationManager::showIncomes() {
@@ -192,16 +243,16 @@ void OperationManager::showIncomes() {
     if (incomes.empty()) { cout << "No incomes in your account. "; system("pause"); }
 
     else {
-        cout << "Incomes in your account:" << endl << endl;
+        cout << "Incomes in your account:" << endl;
         for (Income income : incomes) {
-            cout << "Income ID: "      << income.getTransactionID() << endl;
-            cout << "User ID: " << income.getUserID()        << endl;
-            cout << "Date: "    << AuxillaryFunctions::addDashToDate (income.getDate())          << endl;
+            //cout << "Income ID: "      << income.getTransactionID() << endl;
+            //cout << "User ID: " << income.getUserID()        << endl;
+			cout << "_________________" << endl;
+			cout << "Date: "    << AuxillaryFunctions::addDashToDate (income.getDate())          << endl;
             cout << "Item: "    << income.getItem()          << endl;
-            cout << "Amount: "  << income.getAmount()        << endl << endl;
+            cout << "Amount: "  << income.getAmount()        << endl;
         }
         cout << endl;
-		system("pause");
     }
 }
 
@@ -210,25 +261,38 @@ void OperationManager::showExpenses() {
     system("cls");
 
     if (expenses.empty()) { 
-		cout << "No expences in your account. ";
+		cout << "No expenses in your account. ";
 		system("pause");
 	} else {
         cout << "Expenses in your account:" << endl << endl;
         for (Expense expense : expenses) {
-            cout << "Expense ID: "      << expense.getTransactionID() << endl;
-            cout << "User ID: " << expense.getUserID()        << endl;
-            cout << "Date: "    << expense.getDate()          << endl;
+            //cout << "Expense ID: "      << expense.getTransactionID() << endl;
+            //cout << "User ID: " << expense.getUserID()        << endl;
+			cout << "_________________" << endl;
+			cout << "Date: "    << expense.getDate()          << endl;
             cout << "Item: "    << expense.getItem()          << endl;
             cout << "Amount: "  << expense.getAmount()        << endl << endl;
         }
         cout << endl;
-		system("pause");
     }
 }
 void OperationManager::showBalance()
 {
 	int startDate = getTodaysDate() - elapsedDaysThisMonth();
 	int endDate = getTodaysDate();
+
+	incomes = incomeXML.uploadIncomesFromXML(LOGGED_ID, startDate, endDate);
+	expenses = expenseXML.uploadExpensesFromXML(LOGGED_ID, startDate, endDate);
+
+	sort(incomes.begin(), incomes.end(), [](const Income& lhs, const Income& rhs) {
+		return lhs.getDate() < rhs.getDate(); });
+
+	sort(expenses.begin(), expenses.end(), [](const Expense& lhs, const Expense& rhs) {
+		return lhs.getDate() < rhs.getDate(); });
+
+	showIncomes();
+	showExpenses();
+	system("pause");
 
 
 }
@@ -395,7 +459,6 @@ int OperationManager::getInputedDate()
 			cout << "Cannot input date before 2000. ";
 			system("pause");
 		}
-
 	}
 
 	char inputedDateArray[8];
@@ -521,6 +584,6 @@ bool OperationManager::checkAmountFormat(string inputAmount)
 			return false;
 		}
 	}
-	
+
 	return true;
 }

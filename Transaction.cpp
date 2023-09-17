@@ -10,7 +10,7 @@ int Transaction::getUserID() {
 	return userID;
 }
 
-int Transaction::getDate() {
+int Transaction::getDate() const {
 
 	return date;
 }

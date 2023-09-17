@@ -66,16 +66,16 @@ vector<Income> OperationXML::uploadIncomesFromXML(int LOGGED_ID, int startDate, 
 
             if (TransactionID > IDofLastIncome) IDofLastIncome = TransactionID;
             
-            if (userID == LOGGED_ID) {
-                Income transaction;
-                transaction.setTransactionID(TransactionID);
-                transaction.setUserID(userID);
-                transaction.setDate(date);
-                transaction.setItem(item);
-                transaction.setAmount(amount);
+            Income transaction;
+            transaction.setTransactionID(TransactionID);
+            transaction.setUserID(userID);
+            transaction.setDate(date);
+            transaction.setItem(item);
+            transaction.setAmount(amount);
 
+            if (userID == LOGGED_ID && date >= startDate && date <= endDate) {
                 incomes.push_back(transaction);
-                }
+            }
         }
     }
     else {
@@ -140,7 +140,7 @@ vector<Expense> OperationXML::uploadExpensesFromXML(int LOGGED_ID, int startDate
 
             if (TransactionID > IDofLastExpense) IDofLastExpense = TransactionID;
 
-            if (userID == LOGGED_ID) {
+       
                 Expense transaction;
                 transaction.setTransactionID(TransactionID);
                 transaction.setUserID(userID);
@@ -148,8 +148,9 @@ vector<Expense> OperationXML::uploadExpensesFromXML(int LOGGED_ID, int startDate
                 transaction.setItem(item);
                 transaction.setAmount(amount);
 
-                expenses.push_back(transaction);
-            }
+                if (userID == LOGGED_ID  && date >= startDate && date <= endDate ) {
+                    expenses.push_back(transaction);
+                }
         }
     }
     else {

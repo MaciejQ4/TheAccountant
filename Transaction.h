@@ -27,7 +27,7 @@ public:
 
 	int getTransactionID();
 	int getUserID();
-	int getDate();
+	int getDate() const;
 	string getItem();
 	float getAmount();
 
