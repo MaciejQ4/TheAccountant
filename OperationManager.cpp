@@ -1,6 +1,6 @@
 #include "OperationManager.h"
 #include "AuxillaryFunctions.h"
-
+/**
 void OperationManager::showCurrentTime() {
 
 	std::time_t currentTime = std::time(nullptr);
@@ -62,7 +62,7 @@ void OperationManager::calculateTimeDifference() {
 bool isLeapYear(int year) {
 	return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 }
-
+*/
 int OperationManager::elapsedDaysThisMonth() {
 
 	std::time_t currentTime = std::time(nullptr);
@@ -239,48 +239,80 @@ Expense OperationManager::gatherExpenseInfo() {
 
 void OperationManager::showIncomes() {
 
-    system("cls");
+    //system("cls");
     if (incomes.empty()) { cout << "No incomes in your account. "; system("pause"); }
 
     else {
-        cout << "Incomes in your account:" << endl;
+        cout << "********** Incomes: **********" << endl << endl;
         for (Income income : incomes) {
             //cout << "Income ID: "      << income.getTransactionID() << endl;
             //cout << "User ID: " << income.getUserID()        << endl;
 			cout << "_________________" << endl;
-			cout << "Date: "    << AuxillaryFunctions::addDashToDate (income.getDate())          << endl;
+			cout << "Date: "    << AuxillaryFunctions::addDashesToDate (income.getDate())          << endl;
             cout << "Item: "    << income.getItem()          << endl;
             cout << "Amount: "  << income.getAmount()        << endl;
         }
-        cout << endl;
+		cout << "_________________";
+		cout << endl << endl;
     }
 }
 
 void OperationManager::showExpenses() {
 
-    system("cls");
+    //system("cls");
 
     if (expenses.empty()) { 
 		cout << "No expenses in your account. ";
 		system("pause");
 	} else {
-        cout << "Expenses in your account:" << endl << endl;
+        cout << "********* Expenses: *********" << endl << endl;
         for (Expense expense : expenses) {
             //cout << "Expense ID: "      << expense.getTransactionID() << endl;
             //cout << "User ID: " << expense.getUserID()        << endl;
 			cout << "_________________" << endl;
-			cout << "Date: "    << expense.getDate()          << endl;
+			cout << "Date: " << AuxillaryFunctions::addDashesToDate(expense.getDate()) << endl;
             cout << "Item: "    << expense.getItem()          << endl;
-            cout << "Amount: "  << expense.getAmount()        << endl << endl;
+            cout << "Amount: "  << expense.getAmount()        << endl;
         }
-        cout << endl;
+		cout << "_________________";
+		cout << endl << endl;
     }
 }
-void OperationManager::showBalance()
+void OperationManager::showBalance(string timePeriod)
 {
-	int startDate = getTodaysDate() - elapsedDaysThisMonth();
-	int endDate = getTodaysDate();
+	int startDate;
+	int endDate;
 
+	if (timePeriod == "THIS MONTH") {
+		startDate = getTodaysDate() - elapsedDaysThisMonth();
+		endDate = getTodaysDate();
+	}
+	
+	else if (timePeriod == "PREVIOUS MONTH") {
+		startDate = getTodaysDate() - elapsedDaysThisMonth() - 100;
+		endDate = getTodaysDate() - elapsedDaysThisMonth();
+	}
+
+	else {
+
+		string inputDate = "";
+		do {
+			cout << "Enter start of time period in format: YYYY-MM-DD: " << endl;
+			inputDate = AuxillaryFunctions::readLine();
+
+		} while (!(checkDateFormat(inputDate)));
+
+		startDate = AuxillaryFunctions::eraseDashFromDate(inputDate);
+
+		do {
+			cout << "Enter end of time period in format: YYYY-MM-DD: " << endl;
+			inputDate = AuxillaryFunctions::readLine();
+
+		} while (!(checkDateFormat(inputDate)));
+
+		endDate = AuxillaryFunctions::eraseDashFromDate(inputDate);
+	}
+	
 	incomes = incomeXML.uploadIncomesFromXML(LOGGED_ID, startDate, endDate);
 	expenses = expenseXML.uploadExpensesFromXML(LOGGED_ID, startDate, endDate);
 
@@ -290,8 +322,25 @@ void OperationManager::showBalance()
 	sort(expenses.begin(), expenses.end(), [](const Expense& lhs, const Expense& rhs) {
 		return lhs.getDate() < rhs.getDate(); });
 
+	float sumOfIncomes = 0;
+
+	for (Income income : incomes)
+		sumOfIncomes += income.getAmount();
+
+	float sumOfExpenses = 0;
+
+	for (Expense expense : expenses)
+		sumOfExpenses += expense.getAmount();
+
+	system("cls");
 	showIncomes();
+	cout << "Sum of incomes is: " << sumOfIncomes << endl << endl << endl;
+	
 	showExpenses();
+	cout << "Sum of expenses is: " << sumOfExpenses << endl << endl << endl;
+
+	float balance = sumOfIncomes - sumOfExpenses;
+	cout << "******** Balance for the period is: " << balance << " ********" << endl << endl << endl;
 	system("pause");
 
 
@@ -436,11 +485,11 @@ int OperationManager::getTodaysDate()
 	int dateToday = stoi(dateString);
 	return dateToday;
 }
-
+/*
 int OperationManager::getInputedDate()
 {
 	system("cls");
-	cout << "Enter requested date of transaction in format: YYYY-MM-DD." << endl;
+	cout << "Enter requested date in format: YYYY-MM-DD." << endl;
 	string inputDateWithDash;
 	bool flag = true;
 	
@@ -479,14 +528,14 @@ int OperationManager::getInputedDate()
 	int inputedDate = stoi(inputedDateString);
 	return inputedDate;
 }
-
+*/
 bool OperationManager::checkDateFormat(string userInputDate)
 {
-	if (userInputDate.size() != 10)								// check input isnt to long to be ok
-	{
+	if (userInputDate.size() != 10){								// check input isnt to long to be ok
 		cout << "Wrong input format(incorrect input size). " << endl;
 		return false;
 	}
+
 	if (userInputDate[4] != '-' || userInputDate[7] != '-') {	// check if seperated properly by '-' symbols in the right place
 		cout << "Wrong input format(incorrect date seperation). " << endl;
 		return false;

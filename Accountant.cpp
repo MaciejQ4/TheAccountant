@@ -27,7 +27,7 @@ void Accountant::logOut() {
 
 	userManager.logOut();
 }
-
+/*
 void Accountant::showCurrentTime() {
 
 	operationManager->showCurrentTime();
@@ -44,6 +44,7 @@ void Accountant::howManyDays() {
 	operationManager->elapsedDaysThisMonth();
 }
 
+*/
 void Accountant::createIncome()
 {
 	operationManager->addIncome();
@@ -64,7 +65,7 @@ void Accountant::showExpenses()
 	operationManager->showExpenses();
 }
 
-void Accountant::showBalance() {
+void Accountant::showBalance(string timePeriod) {
 
-	operationManager->showBalance();
+	operationManager->showBalance(timePeriod);
 }

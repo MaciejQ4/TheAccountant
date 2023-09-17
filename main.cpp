@@ -37,35 +37,27 @@ int main()
         else {
 
             system("cls");
-            cout << ">> SUB MENU <<" << endl << endl;
-            cout << "1. Date and time right now" << endl;
-            cout << "2. Calculate elapsed time between two dates" << endl;
-            cout << "3. Current months number of days" << endl;
-            cout << "4. create income" << endl;
-            cout << "5. show incomes" << endl;
-            cout << "6. create expense" << endl;
-            cout << "7. show expenses" << endl;
-            cout << "8. show this months balance" << endl;
+            cout << ">> SUB MENU <<"                    << endl << endl;
+            cout << "1. Add income"                             << endl;
+            cout << "2. Add expense"                            << endl;
+            cout << "3. Show this months balance"               << endl;
+            cout << "4. Show previous months balance"           << endl;
+            cout << "5. Show balance in requested time period"  << endl;
+
 
             char choice = AuxillaryFunctions::readChar();
             switch (choice) {
 
-            case '1': accountant.showCurrentTime();         break;
-            case '2': accountant.calculateTimeDifference(); break;
-            case '3': accountant.howManyDays();             break;
-            case '4': accountant.createIncome();            break;
-            case '5': accountant.showIncomes();             break;
-            case '6': accountant.createExpense();            break;
-            case '7': accountant.showExpenses();             break;
-            case '8': accountant.showBalance();             break;
-          
+            case '1': accountant.createIncome();        break;
+            case '2': accountant.createExpense();       break;
+            case '3': accountant.showBalance("THIS MONTH");         break;
+            case '4': accountant.showBalance("PREVIOUS MONTH");         break;
+            case '5': accountant.showBalance("CUSTOM PERIOD");         break;
 
+         
             default: cout << "Wrong input. "; system("pause");
             }
         }
-    
-    
-    
     }
 }
 

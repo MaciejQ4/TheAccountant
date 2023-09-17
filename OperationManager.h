@@ -48,7 +48,7 @@ public:
 	void showIncomes();
 	void showExpenses();
 
-	void showBalance();
+	void showBalance(string timePeriod);
 
 
 };

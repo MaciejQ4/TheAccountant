@@ -96,14 +96,14 @@ vector<Expense> OperationXML::uploadExpensesFromXML(int LOGGED_ID, int startDate
             return expenses;
         }
 
-        for (TiXmlElement* TransactionElement = root->FirstChildElement("Expense"); TransactionElement; TransactionElement = TransactionElement->NextSiblingElement("Expense")) {
+        for (TiXmlElement* TransactionElement = root->FirstChildElement("Transaction"); TransactionElement; TransactionElement = TransactionElement->NextSiblingElement("Transaction")) {
             int TransactionID = 0;
             int userID = 0;
             int date = 0;
             string item = "";
             float amount = 0;
 
-            TiXmlElement* TransactionIDElement = TransactionElement->FirstChildElement("ExpenseID");
+            TiXmlElement* TransactionIDElement = TransactionElement->FirstChildElement("TransactionID");
             if (TransactionIDElement) {
                 const char* ExpenseIDText = TransactionIDElement->GetText();
                 if (ExpenseIDText)

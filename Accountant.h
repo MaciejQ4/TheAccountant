@@ -28,8 +28,8 @@ public:
 	void showAllUsers();
 	void logOut();
 
-	void showCurrentTime();
-	void calculateTimeDifference();
+	//void showCurrentTime();
+	//void calculateTimeDifference();
 	void howManyDays();
 
 	void createIncome();
@@ -37,6 +37,6 @@ public:
 
 	void createExpense();
 	void showExpenses();
-	void showBalance();
+	void showBalance(string timePeriod);
 };
 

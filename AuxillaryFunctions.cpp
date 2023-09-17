@@ -28,7 +28,7 @@ char AuxillaryFunctions::readChar() {
     }
 }
 
-string AuxillaryFunctions::addDashToDate(int date) {
+string AuxillaryFunctions::addDashesToDate(int date) {
 
     string dateString = to_string(date);
 
