@@ -18,7 +18,7 @@ vector<Income> OperationXML::uploadIncomesFromXML(int LOGGED_ID, int startDate, 
     if (doc.LoadFile(getFileName().c_str())) {
         TiXmlElement* root = doc.RootElement();
         if (!root) {
-            std::cout << "Error: Root element not found in Income XML." << std::endl;
+            cout << "Error: Root element not found in Income XML." << endl;
             return incomes;
         }
 
@@ -33,7 +33,7 @@ vector<Income> OperationXML::uploadIncomesFromXML(int LOGGED_ID, int startDate, 
             if (TransactionIDElement) {
                 const char* IncomeIDText = TransactionIDElement->GetText();
                 if (IncomeIDText)
-                    TransactionID = std::stoi(IncomeIDText);
+                    TransactionID = stoi(IncomeIDText);
             }
 
             TiXmlElement* userIDElement = TransactionElement->FirstChildElement("UserID");
@@ -79,7 +79,7 @@ vector<Income> OperationXML::uploadIncomesFromXML(int LOGGED_ID, int startDate, 
         }
     }
     else {
-        std::cout << "Error loading Income XML file." << std::endl;
+        cout << "Error loading Income XML file." << endl;
     }
     return incomes;
 }
@@ -92,7 +92,7 @@ vector<Expense> OperationXML::uploadExpensesFromXML(int LOGGED_ID, int startDate
     if (doc.LoadFile(getFileName().c_str())) {
         TiXmlElement* root = doc.RootElement();
         if (!root) {
-            std::cout << "Error: Root element not found in Expense XML." << std::endl;
+            cout << "Error: Root element not found in Expense XML." << endl;
             return expenses;
         }
 
@@ -107,7 +107,7 @@ vector<Expense> OperationXML::uploadExpensesFromXML(int LOGGED_ID, int startDate
             if (TransactionIDElement) {
                 const char* ExpenseIDText = TransactionIDElement->GetText();
                 if (ExpenseIDText)
-                    TransactionID = std::stoi(ExpenseIDText);
+                    TransactionID = stoi(ExpenseIDText);
             }
 
             TiXmlElement* userIDElement = TransactionElement->FirstChildElement("UserID");

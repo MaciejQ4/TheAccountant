@@ -15,7 +15,7 @@ int main()
         if (accountant.isUserLogged() == false) {
 
         system("cls");
-        cout << ">> eACCOUNTANT - MAIN MENU <<"  << endl << endl;
+        cout << ">> ACCOUNTANT - MAIN MENU <<"  << endl << endl;
         cout << "1. Create new User"                     << endl;
         cout << "2. Login"                               << endl;
         cout << "3. Show all Users"                      << endl;
