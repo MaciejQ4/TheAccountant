@@ -54,7 +54,7 @@ string AuxillaryFunctions::addDashesToDate(int date) {
     return dateStringModified;
 }
 
-int AuxillaryFunctions::eraseDashFromDate(string date) {
+int AuxillaryFunctions::eraseDashesFromDate(string date) {
 
     char dateArray[8];
     dateArray[0] = date[0];

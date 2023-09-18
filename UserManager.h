@@ -9,6 +9,7 @@ class UserManager
 private:
 
 	int loggedID = 0;
+
 	vector <User> users;
 	UserXML userXML;
 

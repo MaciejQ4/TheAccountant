@@ -4,7 +4,6 @@
 #include "OperationManager.h"
 #include "AuxillaryFunctions.h"
 
-
 class Accountant
 {
 private:
@@ -26,17 +25,12 @@ public:
 	void createUser();
 	void loginUser();
 	void showAllUsers();
-	void logOut();
-
-	//void showCurrentTime();
-	//void calculateTimeDifference();
-	void howManyDays();
-
+	
 	void createIncome();
-	void showIncomes();
-
 	void createExpense();
-	void showExpenses();
 	void showBalance(string timePeriod);
+
+	void changePassword();
+	void logOut();
 };
 

@@ -9,7 +9,5 @@ using namespace std;
 class Expense : public Transaction
 {
 
-public:
-
 };
 

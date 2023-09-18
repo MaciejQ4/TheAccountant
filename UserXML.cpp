@@ -94,3 +94,42 @@ void UserXML::appendUserToXML(User user) {
         doc.SaveFile(getFileName().c_str());
     }
 }
+
+void UserXML::replaceChangedPasswordInXMLfile(int LOGGED_ID, string newPassword, User user) {
+
+    TiXmlDocument doc;
+
+    if (doc.LoadFile(getFileName().c_str())) {
+        TiXmlElement* root = doc.RootElement();
+        if (!root) {
+            cout << "Error: Root element not found in XML. " << endl;
+            system("pause");
+            return;
+        }
+
+        for (TiXmlElement* userElement = root->FirstChildElement("User"); userElement; userElement = userElement->NextSiblingElement("User")) {
+            TiXmlElement* userIDElement = userElement->FirstChildElement("UserID");
+            if (userIDElement) {
+                const char* idText = userIDElement->GetText();
+                if (idText) {
+                    int userIDInFile = stoi(idText);
+                    if (userIDInFile == LOGGED_ID) {
+                        
+                        TiXmlElement* userPasswordElement = userElement->FirstChildElement("UserPassword");
+                        if (userPasswordElement) {
+                            userPasswordElement->FirstChild()->ToText()->SetValue(newPassword.c_str());
+                            doc.SaveFile(getFileName().c_str());
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        cout << "User with ID not found. ";
+        system("pause");
+    }
+    else {
+        cout << "Error loading XML file. ";
+        system("pause");
+    }
+}

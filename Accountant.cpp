@@ -23,49 +23,27 @@ void Accountant::showAllUsers() {
 	userManager.showAllUsers();
 }
 
-void Accountant::logOut() {
+void Accountant::createIncome() {
 
-	userManager.logOut();
-}
-/*
-void Accountant::showCurrentTime() {
-
-	operationManager->showCurrentTime();
-}
-
-void Accountant::calculateTimeDifference() {
-
-	operationManager->calculateTimeDifference();
-}
-
-
-void Accountant::howManyDays() {
-
-	operationManager->elapsedDaysThisMonth();
-}
-
-*/
-void Accountant::createIncome()
-{
 	operationManager->addIncome();
 }
 
-void Accountant::showIncomes()
-{
-	operationManager->showIncomes();
-}
+void Accountant::createExpense(){
 
-void Accountant::createExpense()
-{
 	operationManager->addExpense();
-}
-
-void Accountant::showExpenses()
-{
-	operationManager->showExpenses();
 }
 
 void Accountant::showBalance(string timePeriod) {
 
 	operationManager->showBalance(timePeriod);
+}
+
+void Accountant::changePassword() {
+
+	userManager.changePassword();
+}
+
+void Accountant::logOut() {
+
+	userManager.logOut();
 }

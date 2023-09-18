@@ -22,33 +22,23 @@ private:
 	Income gatherIncomeInfo();
 	Expense gatherExpenseInfo();
 
-	//int getRequestedDate(char day);
+	void showIncomes();
+	void showExpenses();
+
 	int getTodaysDate();
-	int getInputedDate();
-	bool checkDateFormat(string userInputDate);
-	bool checkAmountFormat(string userInputAmount);
-	
+	int elapsedDaysThisMonth();
+
+	bool checkDateFormat(string userInputDate); // auxillary ?
+	bool checkAmountFormat(string userInputAmount);  // auxillary ?
 
 public:
 
 	OperationManager(string NAME_OF_INCOME_XML, string NAME_OF_EXPENSE_XML, int loggedID)
 		: incomeXML(NAME_OF_INCOME_XML), expenseXML(NAME_OF_EXPENSE_XML), LOGGED_ID(loggedID)
 	{
-		//incomes = incomeXML.uploadIncomesFromXML(LOGGED_ID);
-		//expenses = expenseXML.uploadExpensesFromXML(LOGGED_ID);
 	}
 
-	void showCurrentTime();
-	void calculateTimeDifference();
-	int elapsedDaysThisMonth();
-	
 	void addIncome();
 	void addExpense();
-
-	void showIncomes();
-	void showExpenses();
-
 	void showBalance(string timePeriod);
-
-
 };

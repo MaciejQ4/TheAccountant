@@ -1,7 +1,6 @@
 #pragma once
 
 #include "User.h"
-
 #include "tinystr.h"
 #include "tinyxml.h"
 

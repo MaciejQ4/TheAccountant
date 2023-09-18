@@ -1,98 +1,94 @@
 #include "OperationManager.h"
 #include "AuxillaryFunctions.h"
-/**
-void OperationManager::showCurrentTime() {
-
-	std::time_t currentTime = std::time(nullptr);
-	struct tm timeInfo;
-	char timeBuffer[26];
-
-	if (localtime_s(&timeInfo, &currentTime) == 0 && asctime_s(timeBuffer, sizeof(timeBuffer), &timeInfo) == 0) {
-		std::cout << "Current time: " << timeBuffer;
-	}
-	else {
-		std::cout << "Error getting current time.";
-	}
-	cout << timeInfo.tm_mon;
-	int a = timeInfo.tm_hour;
-	cout << a;
-	system("pause");
-}
-
-void OperationManager::calculateTimeDifference() {
-	std::tm start{}, end{};
-
-	cout << "Enter start date (YYYY-MM-DD): ";
-	cin >> std::get_time(&start, "%Y-%m-%d");
-
-	if (cin.fail()) {
-		cout << "Invalid start date format. ";
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		system("pause");
-		return;
-	}
-
-
-	cout << "Enter end date (YYYY-MM-DD): ";
-	cin >> std::get_time(&end, "%Y-%m-%d");
-
-	if (cin.fail()) {
-		cout << "Invalid end date format. ";
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		system("pause");
-		return;
-	}
-
-	std::time_t startTimestamp = std::mktime(&start);
-	std::time_t endTimestamp = std::mktime(&end);
-
-	std::chrono::duration<long long, std::ratio<24 * 60 * 60>> differenceDays =
-		std::chrono::duration_cast<std::chrono::duration<long long, std::ratio<24 * 60 * 60>>>(std::chrono::seconds(endTimestamp - startTimestamp));
-
-	long long days = differenceDays.count();
-
-	cout << days << endl;
-	system("pause");
-
-	return;
-}
-
-bool isLeapYear(int year) {
-	return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-}
-*/
-int OperationManager::elapsedDaysThisMonth() {
-
-	std::time_t currentTime = std::time(nullptr);
-	struct tm timeInfo;
-	char timeBuffer[26];
-
-	if (localtime_s(&timeInfo, &currentTime) == 0 && asctime_s(timeBuffer, sizeof(timeBuffer), &timeInfo) == 0) {
-		return timeInfo.tm_mday;
-	}
-	else {
-		std::cout << "Error getting current time." ;
-		system("pause");
-		return 0;
-	}
-}
 
 void OperationManager::addIncome()
 {
-    system("cls");
-    Income income = gatherIncomeInfo();
-    incomes.push_back(income);
-    incomeXML.appendTransactionToXML(income);
+	system("cls");
+	Income income = gatherIncomeInfo();
+	incomes.push_back(income);
+	incomeXML.appendTransactionToXML(income);
 }
 
 void OperationManager::addExpense()
 {
-    system("cls");
-    Expense expense = gatherExpenseInfo();
-    expenses.push_back(expense);
-    expenseXML.appendTransactionToXML(expense);
+	system("cls");
+	Expense expense = gatherExpenseInfo();
+	expenses.push_back(expense);
+	expenseXML.appendTransactionToXML(expense);
+}
+
+void OperationManager::showBalance(string timePeriod)
+{
+	system("cls");
+	int startDate;
+	int endDate;
+
+	if (timePeriod == "THIS MONTH") {
+		startDate = getTodaysDate() - elapsedDaysThisMonth();
+		endDate = getTodaysDate();
+	}
+
+	else if (timePeriod == "PREVIOUS MONTH") {
+		startDate = getTodaysDate() - elapsedDaysThisMonth() - 100;
+		endDate = getTodaysDate() - elapsedDaysThisMonth();
+	}
+
+	else {
+
+		string inputDate = "";
+		do {
+			cout << "Enter start of time period in format: YYYY-MM-DD: " << endl;
+			inputDate = AuxillaryFunctions::readLine();
+
+		} while (!(checkDateFormat(inputDate)));
+
+		startDate = AuxillaryFunctions::eraseDashesFromDate(inputDate);
+
+		do {
+			cout << "Enter end of time period in format: YYYY-MM-DD: " << endl;
+			inputDate = AuxillaryFunctions::readLine();
+
+		} while (!(checkDateFormat(inputDate)));
+
+		endDate = AuxillaryFunctions::eraseDashesFromDate(inputDate);
+
+		if (endDate < startDate) {
+			cout << "Inputed end date is before the start date. Please input correct dates. ";
+			system("pause");
+			return;
+		}
+	}
+
+	incomes = incomeXML.uploadIncomesFromXML(LOGGED_ID, startDate, endDate);
+	expenses = expenseXML.uploadExpensesFromXML(LOGGED_ID, startDate, endDate);
+
+	sort(incomes.begin(), incomes.end(), [](const Income& lhs, const Income& rhs) {
+		return lhs.getDate() < rhs.getDate(); });
+
+	sort(expenses.begin(), expenses.end(), [](const Expense& lhs, const Expense& rhs) {
+		return lhs.getDate() < rhs.getDate(); });
+
+	float sumOfIncomes = 0;
+
+	for (Income income : incomes)
+		sumOfIncomes += income.getAmount();
+
+	float sumOfExpenses = 0;
+
+	for (Expense expense : expenses)
+		sumOfExpenses += expense.getAmount();
+
+	system("cls");
+	showIncomes();
+	cout << "Sum of incomes: " << sumOfIncomes << endl << endl << endl;
+
+	showExpenses();
+	cout << "Sum of expenses: " << sumOfExpenses << endl << endl << endl;
+
+	float balance = sumOfIncomes - sumOfExpenses;
+	cout << "******************* End balance: *******************" << endl << endl << endl;
+	cout << "Balance for the period: " << balance << endl << endl << endl;
+	system("pause");
 }
 
 Income OperationManager::gatherIncomeInfo() {
@@ -152,7 +148,7 @@ Income OperationManager::gatherIncomeInfo() {
 
 			} while (!(checkDateFormat(inputDate)));
 		 
-			int date = AuxillaryFunctions::eraseDashFromDate(inputDate);
+			int date = AuxillaryFunctions::eraseDashesFromDate(inputDate);
 			
 			income.setDate(date);
 			cout << "Transaction added succesfully with provided date. ";
@@ -223,7 +219,7 @@ Expense OperationManager::gatherExpenseInfo() {
 
 			} while (!(checkDateFormat(inputDate)));
 
-			int date = AuxillaryFunctions::eraseDashFromDate(inputDate);
+			int date = AuxillaryFunctions::eraseDashesFromDate(inputDate);
 
 			expense.setDate(date);
 			cout << "Transaction added succesfully with provided date. ";
@@ -240,10 +236,10 @@ Expense OperationManager::gatherExpenseInfo() {
 void OperationManager::showIncomes() {
 
     //system("cls");
-    if (incomes.empty()) { cout << "No incomes in your account. "; system("pause"); }
+    if (incomes.empty())  cout << "No incomes in this time period. ";
 
     else {
-        cout << "********** Incomes: **********" << endl << endl;
+        cout << "********************* Incomes: **********************" << endl << endl;
         for (Income income : incomes) {
             //cout << "Income ID: "      << income.getTransactionID() << endl;
             //cout << "User ID: " << income.getUserID()        << endl;
@@ -253,19 +249,17 @@ void OperationManager::showIncomes() {
             cout << "Amount: "  << income.getAmount()        << endl;
         }
 		cout << "_________________";
-		cout << endl << endl;
+		cout << endl << endl << endl;
     }
 }
 
 void OperationManager::showExpenses() {
 
     //system("cls");
-
-    if (expenses.empty()) { 
-		cout << "No expenses in your account. ";
-		system("pause");
-	} else {
-        cout << "********* Expenses: *********" << endl << endl;
+    if (expenses.empty()) cout << "No expenses in this time period. ";
+		
+	 else {
+        cout << "******************** Expenses: *********************" << endl << endl;
         for (Expense expense : expenses) {
             //cout << "Expense ID: "      << expense.getTransactionID() << endl;
             //cout << "User ID: " << expense.getUserID()        << endl;
@@ -275,180 +269,21 @@ void OperationManager::showExpenses() {
             cout << "Amount: "  << expense.getAmount()        << endl;
         }
 		cout << "_________________";
-		cout << endl << endl;
+		cout << endl << endl << endl;
     }
 }
-void OperationManager::showBalance(string timePeriod)
-{
-	int startDate;
-	int endDate;
 
-	if (timePeriod == "THIS MONTH") {
-		startDate = getTodaysDate() - elapsedDaysThisMonth();
-		endDate = getTodaysDate();
-	}
-	
-	else if (timePeriod == "PREVIOUS MONTH") {
-		startDate = getTodaysDate() - elapsedDaysThisMonth() - 100;
-		endDate = getTodaysDate() - elapsedDaysThisMonth();
-	}
-
-	else {
-
-		string inputDate = "";
-		do {
-			cout << "Enter start of time period in format: YYYY-MM-DD: " << endl;
-			inputDate = AuxillaryFunctions::readLine();
-
-		} while (!(checkDateFormat(inputDate)));
-
-		startDate = AuxillaryFunctions::eraseDashFromDate(inputDate);
-
-		do {
-			cout << "Enter end of time period in format: YYYY-MM-DD: " << endl;
-			inputDate = AuxillaryFunctions::readLine();
-
-		} while (!(checkDateFormat(inputDate)));
-
-		endDate = AuxillaryFunctions::eraseDashFromDate(inputDate);
-	}
-	
-	incomes = incomeXML.uploadIncomesFromXML(LOGGED_ID, startDate, endDate);
-	expenses = expenseXML.uploadExpensesFromXML(LOGGED_ID, startDate, endDate);
-
-	sort(incomes.begin(), incomes.end(), [](const Income& lhs, const Income& rhs) {
-		return lhs.getDate() < rhs.getDate(); });
-
-	sort(expenses.begin(), expenses.end(), [](const Expense& lhs, const Expense& rhs) {
-		return lhs.getDate() < rhs.getDate(); });
-
-	float sumOfIncomes = 0;
-
-	for (Income income : incomes)
-		sumOfIncomes += income.getAmount();
-
-	float sumOfExpenses = 0;
-
-	for (Expense expense : expenses)
-		sumOfExpenses += expense.getAmount();
-
-	system("cls");
-	showIncomes();
-	cout << "Sum of incomes is: " << sumOfIncomes << endl << endl << endl;
-	
-	showExpenses();
-	cout << "Sum of expenses is: " << sumOfExpenses << endl << endl << endl;
-
-	float balance = sumOfIncomes - sumOfExpenses;
-	cout << "******** Balance for the period is: " << balance << " ********" << endl << endl << endl;
-	system("pause");
-
-
-}
-/*
-int OperationManager::getRequestedDate(char day)
-{
-	std::time_t currentTime = std::time(nullptr);
-	struct tm timeInfo;
-	char timeBuffer[26];
-	
-	if (localtime_s(&timeInfo, &currentTime) == 0 && asctime_s(timeBuffer, sizeof(timeBuffer), &timeInfo) == 0) {
-		std::cout << "Current time: " << timeBuffer << endl;
-	} else {
-		std::cout << "Error getting current time.";
-	}
-	
-	char dateTodayArray[8];
-	if (timeInfo.tm_mday < 10) {
-		dateTodayArray[6] = 0 + '0';
-		dateTodayArray[7] = timeInfo.tm_mday + '0';
-	}
-	else {
-		dateTodayArray[6] = (timeInfo.tm_mday / 10) + '0';
-		dateTodayArray[7] = (timeInfo.tm_mday % 10) + '0';
-	}
-	timeInfo.tm_mon += 1;
-	if (timeInfo.tm_mon < 10) {
-		dateTodayArray[4] = 0 + '0';
-		dateTodayArray[5] = timeInfo.tm_mon + '0';
-	}
-	else {
-		dateTodayArray[4] = (timeInfo.tm_mon / 10) + '0';
-		dateTodayArray[5] = (timeInfo.tm_mon % 10) + '0';
-	}
-	timeInfo.tm_year += 1900;
-	dateTodayArray[0] = (timeInfo.tm_year / 1000) + '0';
-	dateTodayArray[1] = ((timeInfo.tm_year / 100) % 10) + '0';
-	dateTodayArray[2] = ((timeInfo.tm_year / 10) % 10) + '0';
-	dateTodayArray[3] = (timeInfo.tm_year % 10) + '0';
-
-	string dateString = "";
-	for (int i = 0; i < 8; i++)
-		dateString += dateTodayArray[i];
-
-	cout << dateString;
-	int dateToday = stoi(dateString);
-	
-	if (day == 'Y' || day == 'y') return dateToday;
-
-	if (day == 'N' || day == 'n') {
-
-		cout << "Enter requested date in format: YYYY-MM-DD.";
-		string inputDateWithDash = AuxillaryFunctions::readLine();
-
-		if (inputDateWithDash.size() > 10) {
-			cout << "Wrong input format. ";
-			system("pause");
-			return 0;
-		}
-		if (inputDateWithDash[4] != '-' || inputDateWithDash[6] != '-') {
-			cout << "Wrong input format. ";
-			system("pause");
-			return 0;
-		}
-		if (inputDateWithDash[0] < 2) { // if year is less than 2000
-			cout << "Cannot input date before 2000. ";
-			system("pause");
-			return 0;
-		}
-
-		char inputedDateArray[8];
-		inputedDateArray[0] = inputDateWithDash[0];
-		inputedDateArray[0] = inputDateWithDash[1];
-		inputedDateArray[0] = inputDateWithDash[2];
-		inputedDateArray[0] = inputDateWithDash[3];
-		inputedDateArray[0] = inputDateWithDash[5];
-		inputedDateArray[0] = inputDateWithDash[6];
-		inputedDateArray[0] = inputDateWithDash[8];
-		inputedDateArray[0] = inputDateWithDash[9];
-
-		string inputedDateString = "";
-
-		for (int i = 0; i < 8; i++)
-			inputedDateString += inputedDateArray[i];
-
-		int inputedDate = stoi(inputedDateString);
-
-		if (inputedDate > dateToday) {
-			cout << "Future dates are not acceptable. ";
-			system("pause");
-			return 0;
-		}
-		else return inputedDate;
-	}
-}
-*/
 int OperationManager::getTodaysDate()
 {
-	std::time_t currentTime = std::time(nullptr);
+	std::time_t currentTime = time(nullptr);
 	struct tm timeInfo;
 	char timeBuffer[26];
 
 	if (localtime_s(&timeInfo, &currentTime) == 0 && asctime_s(timeBuffer, sizeof(timeBuffer), &timeInfo) == 0) {
-		//std::cout << "Current time: " << timeBuffer << endl;
+		//cout << "Current time: " << timeBuffer << endl;
 	}
 	else {
-		std::cout << "Error getting todays date.";
+		cout << "Error getting todays date from PC.";
 		system("pause");
 		return 0;
 	}
@@ -485,53 +320,26 @@ int OperationManager::getTodaysDate()
 	int dateToday = stoi(dateString);
 	return dateToday;
 }
-/*
-int OperationManager::getInputedDate()
-{
-	system("cls");
-	cout << "Enter requested date in format: YYYY-MM-DD." << endl;
-	string inputDateWithDash;
-	bool flag = true;
-	
-	while (flag) {
-		inputDateWithDash = AuxillaryFunctions::readLine();
 
-		if (inputDateWithDash.size() < 10) {
-			cout << "Wrong input format. ";
-			system("pause");
-		}
-		if (inputDateWithDash[4] != '-' || inputDateWithDash[6] != '-') {
-			cout << "Wrong input format. ";
-			system("pause");
-		}
-		if (inputDateWithDash[0] < 2) { // if year is less than 2000
-			cout << "Cannot input date before 2000. ";
-			system("pause");
-		}
+int OperationManager::elapsedDaysThisMonth() {
+
+	time_t currentTime = time(nullptr);
+	struct tm timeInfo;
+	char timeBuffer[26];
+
+	if (localtime_s(&timeInfo, &currentTime) == 0 && asctime_s(timeBuffer, sizeof(timeBuffer), &timeInfo) == 0) {
+		return timeInfo.tm_mday;
 	}
-
-	char inputedDateArray[8];
-	inputedDateArray[0] = inputDateWithDash[0];
-	inputedDateArray[0] = inputDateWithDash[1];
-	inputedDateArray[0] = inputDateWithDash[2];
-	inputedDateArray[0] = inputDateWithDash[3];
-	inputedDateArray[0] = inputDateWithDash[5];
-	inputedDateArray[0] = inputDateWithDash[6];
-	inputedDateArray[0] = inputDateWithDash[8];
-	inputedDateArray[0] = inputDateWithDash[9];
-
-	string inputedDateString = "";
-
-	for (int i = 0; i < 8; i++)
-		inputedDateString += inputedDateArray[i];
-
-	int inputedDate = stoi(inputedDateString);
-	return inputedDate;
+	else {
+		cout << "Error getting time from PC. ";
+		system("pause");
+		return 0;
+	}
 }
-*/
+
 bool OperationManager::checkDateFormat(string userInputDate)
 {
-	if (userInputDate.size() != 10){								// check input isnt to long to be ok
+	if (userInputDate.size() != 10){							// check input isnt to long to be ok
 		cout << "Wrong input format(incorrect input size). " << endl;
 		return false;
 	}
@@ -551,7 +359,7 @@ bool OperationManager::checkDateFormat(string userInputDate)
 	dateArray[6] = userInputDate[8];
 	dateArray[7] = userInputDate[9];
 
-	for (int i = 0; i < 8; i++) {							
+	for (size_t i = 0; i < 8; i++) {
 		if (!(isdigit(dateArray[i]))) {							// check if input is made of digits only
 			cout << "Wrong input format. " << endl;
 			return false;
@@ -559,7 +367,7 @@ bool OperationManager::checkDateFormat(string userInputDate)
 	}
 
 	string yearString = "";										// check year part of inputed string ([XXXX]-MM-DD)
-	for (int i = 0; i < 4; i++)
+	for (size_t i = 0; i < 4; i++)
 		yearString += dateArray[i];
 	 
 	int yearInt = stoi(yearString);
@@ -588,8 +396,7 @@ bool OperationManager::checkDateFormat(string userInputDate)
 
 	string dateString = yearString + monthString + dayString;
 	int dateInt = stoi(dateString);
-	if (dateInt > getTodaysDate())								// check if inputed date isnt a future date
-	{
+	if (dateInt > getTodaysDate())	{						   // check if inputed date isnt a future date{
 		cout << "Can't input future date. " << endl;
 		return false;
 	}
@@ -598,20 +405,20 @@ bool OperationManager::checkDateFormat(string userInputDate)
 
 bool OperationManager::checkAmountFormat(string inputAmount)
 {
-	for (size_t i = 0; i < inputAmount.size(); i++) {	 // check string for forbidden characters
+	for (size_t i = 0; i < inputAmount.size(); i++) {		  // check string for forbidden characters
 		if (!(isdigit(inputAmount[i])) && inputAmount[i] != ',' && inputAmount[i] != '.') {
-			cout << "Wrong input format. " << endl;
+			cout << "Wrong input format. ";
 			system("pause");
 			return false;
 		}
 	}
 
-	for (size_t i = 0; i < inputAmount.size(); i++){      // change all commas to dots
+	for (size_t i = 0; i < inputAmount.size(); i++){		  // change all commas to dots
 		if (inputAmount[i] == ',') inputAmount[i] = '.';
 	}
 	
 	int dotCounter = 0;
-	for (size_t i = 0; i < inputAmount.size(); i++) {	  // check string for too many dots
+	for (size_t i = 0; i < inputAmount.size(); i++) {		  // check string for too many dots
 		if (inputAmount[i] == '.') dotCounter++;
 	}
 
@@ -628,11 +435,10 @@ bool OperationManager::checkAmountFormat(string inputAmount)
 	
 	for (size_t i = dotPlace+3; i < inputAmount.size(); i++) {	// decimals smaller then 0.01 forbidden
 		if (inputAmount[i] != 0) {
-			cout << "Wrong input format. 0.01 is smallest money resolution. " << endl;
+			cout << "Wrong input format. 0.01 is smallest resolution for transaction amount. " << endl;
 			system("pause");
 			return false;
 		}
 	}
-
 	return true;
 }

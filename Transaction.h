@@ -1,9 +1,11 @@
 #pragma once
 
+#include <string>
 #include <iostream>
 #include <string>
 #include <string.h>
 #include <sstream>
+
 using namespace std;
 
 class Transaction

@@ -27,7 +27,7 @@ void UserManager::loginUser() {
 
     for (size_t i = 0; i < users.size(); i++) {
         if (users[i].getUserLogin() == login && users[i].getUserPassword() == password) {
-            cout << login << " logged in with ID: " << users[i].getUserID() << endl;
+            cout << login << " logged in. User ID: " << users[i].getUserID() << endl;
             system("pause");
             int id = users[i].getUserID();
             setLoggedID(id);
@@ -60,6 +60,24 @@ void UserManager::showAllUsers() {
         }
         cout << endl; system("pause");
     }
+}
+
+void UserManager::changePassword() {
+
+    system("cls");
+    cout << "Enter new password: " << endl;
+    string newPassword = AuxillaryFunctions::readLine();
+
+    for (User& user : users) {
+
+        if (user.getUserID() == loggedID) {
+            user.setUserPassword(newPassword);
+            userXML.replaceChangedPasswordInXMLfile(loggedID, newPassword, user);
+            break;
+        }
+    }
+    cout << "Password changed succesfully. ";
+    system("pause");
 }
 
 void UserManager::logOut() {

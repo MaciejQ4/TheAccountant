@@ -1,6 +1,5 @@
 #pragma once
-
-# include "Transaction.h"
+#include "Transaction.h"
 
 class Income : public Transaction
 {
