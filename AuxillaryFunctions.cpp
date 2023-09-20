@@ -268,8 +268,8 @@ bool AuxillaryFunctions::checkAmountFormat(string inputAmount)
 		}
 	}
 
-	if (inputAmount.size() - dotPlace > 3) {
-		cout << "Wrong input format. More than two decimal places not allowed.";
+	if ((inputAmount.size() - dotPlace > 3) && dotPlace != 0) {
+		cout << "Wrong input format. More than two decimal places not allowed. ";
 		system("pause");
 		return false;
 	}
