@@ -20,17 +20,8 @@ private:
 	vector<Transaction> expenses;
 	OperationXML expenseXML;
 
-	Transaction gatherIncomeInfo();
-	Transaction gatherExpenseInfo();
-
-	void showIncomes();
-	void showExpenses();
-
-	int getTodaysDate();
-	int elapsedDaysThisMonth();
-
-	bool checkDateFormat(string userInputDate); // auxillary ?
-	bool checkAmountFormat(string userInputAmount);  // auxillary ?
+	Transaction gatherTransactionInfo(transactionType transactionType);
+	void showTransactions(transactionType transactionType);
 
 public:
 

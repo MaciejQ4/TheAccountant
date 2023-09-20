@@ -4,12 +4,7 @@ int OperationXML::getIDofLastTransaction() {
 
     return IDofLastTransaction;
 }
-/*
-int OperationXML::getIDofLastExpense()
-{
-    return IDofLastTransaction;
-}
-*/
+
 vector<Transaction> OperationXML::uploadTransactionsFromXML(int LOGGED_ID, int startDate, int endDate)
 {
     vector<Transaction> transactions;
@@ -64,7 +59,7 @@ vector<Transaction> OperationXML::uploadTransactionsFromXML(int LOGGED_ID, int s
                     amount = stof(AmountText);
             }
 
-            if (TransactionID > IDofLastTransaction) IDofLastTransaction = TransactionID;
+            if (TransactionID > getIDofLastTransaction()) IDofLastTransaction = TransactionID;
             
             Transaction transaction;
             transaction.setTransactionID(TransactionID);
@@ -83,82 +78,7 @@ vector<Transaction> OperationXML::uploadTransactionsFromXML(int LOGGED_ID, int s
     }
     return transactions;
 }
-/*
-vector<Transaction> OperationXML::uploadExpensesFromXML(int LOGGED_ID, int startDate, int endDate)
-{
-    vector<Transaction> expenses;
-    TiXmlDocument doc;
 
-    if (doc.LoadFile(getFileName().c_str())) {
-        TiXmlElement* root = doc.RootElement();
-        if (!root) {
-            cout << "Error: Root element not found in Expense XML." << endl;
-            return expenses;
-        }
-
-        for (TiXmlElement* TransactionElement = root->FirstChildElement("Transaction"); TransactionElement; TransactionElement = TransactionElement->NextSiblingElement("Transaction")) {
-            int TransactionID = 0;
-            int userID = 0;
-            int date = 0;
-            string item = "";
-            float amount = 0;
-
-            TiXmlElement* TransactionIDElement = TransactionElement->FirstChildElement("TransactionID");
-            if (TransactionIDElement) {
-                const char* ExpenseIDText = TransactionIDElement->GetText();
-                if (ExpenseIDText)
-                    TransactionID = stoi(ExpenseIDText);
-            }
-
-            TiXmlElement* userIDElement = TransactionElement->FirstChildElement("UserID");
-            if (userIDElement) {
-                const char* UserIDText = userIDElement->GetText();
-                if (UserIDText)
-                    userID = stoi(UserIDText);
-            }
-
-            TiXmlElement* DateElement = TransactionElement->FirstChildElement("Date");
-            if (DateElement) {
-                const char* DateText = DateElement->GetText();
-                if (DateText)
-                    date = stoi(DateText);
-            }
-
-            TiXmlElement* ItemElement = TransactionElement->FirstChildElement("Item");
-            if (ItemElement) {
-                const char* ItemText = ItemElement->GetText();
-                if (ItemText)
-                    item = ItemText;
-            }
-
-            TiXmlElement* AmountElement = TransactionElement->FirstChildElement("Amount");
-            if (AmountElement) {
-                const char* AmountText = AmountElement->GetText();
-                if (AmountText)
-                    amount = stof(AmountText);
-            }
-
-            if (TransactionID > IDofLastTransaction) IDofLastTransaction = TransactionID;
-
-       
-                Transaction transaction;
-                transaction.setTransactionID(TransactionID);
-                transaction.setUserID(userID);
-                transaction.setDate(date);
-                transaction.setItem(item);
-                transaction.setAmount(amount);
-
-                if (userID == LOGGED_ID  && date >= startDate && date <= endDate ) {
-                    expenses.push_back(transaction);
-                }
-        }
-    }
-    else {
-        cout << "Error loading Expense XML file." << endl;
-    }
-    return expenses;
-}
-*/
 void OperationXML::appendTransactionToXML(Transaction transaction)
 {
     TiXmlDocument doc;
