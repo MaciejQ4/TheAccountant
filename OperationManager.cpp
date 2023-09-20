@@ -68,26 +68,26 @@ void OperationManager::showBalance(string timePeriod)
 	sort(expenses.begin(), expenses.end(), [](const Expense& lhs, const Expense& rhs) {
 		return lhs.getDate() < rhs.getDate(); });
 
-	float sumOfIncomes = 0;
+	float sumOfIncomes = 0.00;
 
 	for (Income income : incomes)
 		sumOfIncomes += income.getAmount();
 
-	float sumOfExpenses = 0;
+	float sumOfExpenses = 0.00;
 
 	for (Expense expense : expenses)
 		sumOfExpenses += expense.getAmount();
 
 	system("cls");
 	showIncomes();
-	cout << "Sum of incomes: " << sumOfIncomes << endl << endl << endl;
+	cout << "Sum of incomes: " << fixed << setprecision(2) << sumOfIncomes << endl << endl << endl;
 
 	showExpenses();
-	cout << "Sum of expenses: " << sumOfExpenses << endl << endl << endl;
+	cout << "Sum of expenses: " << fixed << setprecision(2) << sumOfExpenses << endl << endl << endl;
 
 	float balance = sumOfIncomes - sumOfExpenses;
 	cout << "******************* End balance: *******************" << endl << endl << endl;
-	cout << "Balance for the period: " << balance << endl << endl << endl;
+	cout << "Balance for the period: " << fixed << setprecision(2) << balance << endl << endl << endl;
 	system("pause");
 }
 
@@ -339,7 +339,7 @@ int OperationManager::elapsedDaysThisMonth() {
 
 bool OperationManager::checkDateFormat(string userInputDate)
 {
-	if (userInputDate.size() != 10){							// check input isnt to long to be ok
+	if (userInputDate.size() != 10){							// check input isnt too long to be ok
 		cout << "Wrong input format(incorrect input size). " << endl;
 		return false;
 	}
@@ -369,9 +369,12 @@ bool OperationManager::checkDateFormat(string userInputDate)
 	string yearString = "";										// check year part of inputed string ([XXXX]-MM-DD)
 	for (size_t i = 0; i < 4; i++)
 		yearString += dateArray[i];
-	 
-	int yearInt = stoi(yearString);
-	if (yearInt < 2000) {
+
+	int year = stoi(yearString);
+
+	bool leapYear = AuxillaryFunctions::isLeapYear(year);
+
+	if (year < 2000) {
 		cout << "Cannot enter year less then 2000. " << endl;
 		return false;
 	}
@@ -379,8 +382,8 @@ bool OperationManager::checkDateFormat(string userInputDate)
 	string monthString = "";									// check month part of inputed string (YYYY-[XX]-DD)
 	monthString += dateArray[4];
 	monthString += dateArray[5];
-	int monthInt = stoi(monthString);
-	if (monthInt > 12) {
+	int month = stoi(monthString);
+	if (month > 12) {
 		cout << "Invalid month. " << endl;
 		return false;
 	}
@@ -388,15 +391,31 @@ bool OperationManager::checkDateFormat(string userInputDate)
 	string dayString = "";										// check day part of inputed string (YYYY-MM-[XX])
 	dayString += dateArray[6];
 	dayString += dateArray[7];
-	int dayInt = stoi(dayString);
-	if (dayInt > 31) {
-		cout << "Invalid day. " << endl;
+	int day = stoi(dayString);
+
+	if (day > 31 || day == 0) {
+		cout << "Invalid day. a Month cannot have more than 31 or less than 1 days. " << endl;
+		return false;
+	}
+
+	if (day > 30 && (month == 4 || month == 6 || month == 9 || month == 11)) {
+		cout << "Invalid day. Inputed month can not have more than 30 days. " << endl;
+		return false;
+	}
+
+	if (day > 29 && month == 2 && leapYear) {
+		cout << "Invalid day. February cannot have more than 29 days in inputed(leap) year. " << endl;
+		return false;
+	}
+
+	if (day > 28 && month == 2 && !leapYear) {
+		cout << "Invalid day. February cannot have more than 28 days in inputed year. " << endl;
 		return false;
 	}
 
 	string dateString = yearString + monthString + dayString;
-	int dateInt = stoi(dateString);
-	if (dateInt > getTodaysDate())	{						   // check if inputed date isnt a future date{
+	int date = stoi(dateString);
+	if (date > getTodaysDate())	{						   // check if inputed date isnt a future date
 		cout << "Can't input future date. " << endl;
 		return false;
 	}
@@ -433,12 +452,19 @@ bool OperationManager::checkAmountFormat(string inputAmount)
 		if (inputAmount[i] == '.') dotPlace = i;
 	}
 	
-	for (size_t i = dotPlace+3; i < inputAmount.size(); i++) {	// decimals smaller then 0.01 forbidden
-		if (inputAmount[i] != 0) {
-			cout << "Wrong input format. 0.01 is smallest resolution for transaction amount. " << endl;
+	for (size_t i = 0; i < inputAmount.size(); i++) {
+		char ch = inputAmount[i];
+		if (i == dotPlace && ch == '0') {
+			cout << "Wrong input format. Leading zeros not allowed. " << endl;
 			system("pause");
 			return false;
 		}
+	}
+
+	if (inputAmount.size() - dotPlace > 3) { 
+		cout << "Wrong input format. More than two decimal places not allowed.";
+		system("pause");
+		return false;
 	}
 	return true;
 }
