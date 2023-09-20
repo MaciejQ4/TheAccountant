@@ -15,10 +15,10 @@ int main()
         if (accountant.isUserLogged() == false) {
 
         system("cls");
-        cout << ">> ACCOUNTANT - MAIN MENU <<"  << endl << endl;
+        cout << ">>> ACCOUNTANT - MAIN MENU <<<"  << endl << endl;
         cout << "1. Create new User"                     << endl;
         cout << "2. Login"                               << endl;
-        cout << "3. Show all Users"                      << endl;
+        //cout << "3. Show all Users"                      << endl;
         cout << "9. Close application"                   << endl;
 
         char choice = AuxillaryFunctions::readChar();
@@ -26,7 +26,7 @@ int main()
 
         case '1': accountant.createUser();              break;
         case '2': accountant.loginUser();               break;
-        case '3': accountant.showAllUsers();            break;
+        //case '3': accountant.showAllUsers();            break;
         case '9': exit(0);                              break;
 
         default: cout << "Wrong input. "; system("pause");
@@ -36,7 +36,7 @@ int main()
         else {
 
             system("cls");
-            cout << ">> USER MENU <<"                           << endl << endl;
+            cout << ">>> USER MENU <<<"                           << endl << endl;
             cout << "1. Add income"                                     << endl;
             cout << "2. Add expense"                            << endl << endl;
             cout << "3. Show this months balance"                       << endl;
@@ -50,9 +50,9 @@ int main()
 
             case '1': accountant.createIncome();                    break;
             case '2': accountant.createExpense();                   break;
-            case '3': accountant.showBalance("THIS MONTH");         break;
-            case '4': accountant.showBalance("PREVIOUS MONTH");     break;
-            case '5': accountant.showBalance("CUSTOM PERIOD");      break;
+            case '3': accountant.showBalance(THIS_MONTH);         break;
+            case '4': accountant.showBalance(PREVIOUS_MONTH);     break;
+            case '5': accountant.showBalance(CUSTOM_PERIOD);      break;
             case '6': accountant.changePassword();                  break;
             case '7': accountant.logOut();                          break;
 

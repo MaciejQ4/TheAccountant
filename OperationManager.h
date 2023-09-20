@@ -6,6 +6,7 @@
 #include <time.h>
 #include <iomanip>
 #include <chrono>
+#include "timePeriod.h"
 
 class OperationManager
 {
@@ -40,5 +41,5 @@ public:
 
 	void addIncome();
 	void addExpense();
-	void showBalance(string timePeriod);
+	void showBalance(timePeriod timePeriod);
 };

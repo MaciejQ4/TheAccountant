@@ -33,7 +33,7 @@ void Accountant::createExpense(){
 	operationManager->addExpense();
 }
 
-void Accountant::showBalance(string timePeriod) {
+void Accountant::showBalance(timePeriod timePeriod) {
 
 	operationManager->showBalance(timePeriod);
 }

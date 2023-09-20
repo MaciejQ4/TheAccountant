@@ -28,7 +28,7 @@ public:
 	
 	void createIncome();
 	void createExpense();
-	void showBalance(string timePeriod);
+	void showBalance(timePeriod timePeriod);
 
 	void changePassword();
 	void logOut();

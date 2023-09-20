@@ -17,23 +17,26 @@ void OperationManager::addExpense()
 	expenseXML.appendTransactionToXML(transaction);
 }
 
-void OperationManager::showBalance(string timePeriod)
+void OperationManager::showBalance(timePeriod timePeriod)
 {
 	system("cls");
 	int startDate;
 	int endDate;
 
-	if (timePeriod == "THIS MONTH") {
+	switch (timePeriod) {
+	case THIS_MONTH:
 		startDate = getTodaysDate() - elapsedDaysThisMonth();
 		endDate = getTodaysDate();
-	}
+		break;
 
-	else if (timePeriod == "PREVIOUS MONTH") {
+
+	case PREVIOUS_MONTH:
 		startDate = getTodaysDate() - elapsedDaysThisMonth() - 100;
 		endDate = getTodaysDate() - elapsedDaysThisMonth();
-	}
+		break;
 
-	else {
+
+	case CUSTOM_PERIOD:
 
 		string inputDate = "";
 		do {
@@ -57,8 +60,10 @@ void OperationManager::showBalance(string timePeriod)
 			system("pause");
 			return;
 		}
-	}
+		break;
 
+	}
+	
 	incomes = incomeXML.uploadTransactionsFromXML(LOGGED_ID, startDate, endDate);
 	expenses = expenseXML.uploadTransactionsFromXML(LOGGED_ID, startDate, endDate);
 
@@ -340,12 +345,12 @@ int OperationManager::elapsedDaysThisMonth() {
 bool OperationManager::checkDateFormat(string userInputDate)
 {
 	if (userInputDate.size() != 10){							// check input isnt too long to be ok
-		cout << "Wrong input format(incorrect input size). " << endl;
+		cout << "Wrong input format. " << endl;
 		return false;
 	}
 
 	if (userInputDate[4] != '-' || userInputDate[7] != '-') {	// check if seperated properly by '-' symbols in the right place
-		cout << "Wrong input format(incorrect date seperation). " << endl;
+		cout << "Wrong input format. " << endl;
 		return false;
 	}
 
