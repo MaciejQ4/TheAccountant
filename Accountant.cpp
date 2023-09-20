@@ -23,14 +23,9 @@ void Accountant::showAllUsers() {
 	userManager.showAllUsers();
 }
 
-void Accountant::createIncome() {
+void Accountant::createTransaction(transactionType transactionType) {
 
-	operationManager->addIncome();
-}
-
-void Accountant::createExpense(){
-
-	operationManager->addExpense();
+	operationManager->addTransaction(transactionType);
 }
 
 void Accountant::showBalance(timePeriod timePeriod) {

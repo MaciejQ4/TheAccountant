@@ -48,8 +48,8 @@ int main()
             char choice = AuxillaryFunctions::readChar();
             switch (choice) {
 
-            case '1': accountant.createIncome();                    break;
-            case '2': accountant.createExpense();                   break;
+            case '1': accountant.createTransaction(INCOME);                    break;
+            case '2': accountant.createTransaction(EXPENSE);                   break;
             case '3': accountant.showBalance(THIS_MONTH);         break;
             case '4': accountant.showBalance(PREVIOUS_MONTH);     break;
             case '5': accountant.showBalance(CUSTOM_PERIOD);      break;

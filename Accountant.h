@@ -26,8 +26,7 @@ public:
 	void loginUser();
 	void showAllUsers();
 	
-	void createIncome();
-	void createExpense();
+	void createTransaction(transactionType transactionType);
 	void showBalance(timePeriod timePeriod);
 
 	void changePassword();

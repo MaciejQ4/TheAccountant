@@ -39,7 +39,6 @@ public:
 	{
 	}
 
-	void addIncome();
-	void addExpense();
+	void addTransaction(transactionType transactionType);
 	void showBalance(timePeriod timePeriod);
 };

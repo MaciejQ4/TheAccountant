@@ -1,20 +1,23 @@
 #include "OperationManager.h"
 #include "AuxillaryFunctions.h"
 
-void OperationManager::addIncome()
+void OperationManager::addTransaction(transactionType transactionType)
 {
 	system("cls");
 	Transaction transaction = gatherIncomeInfo();
-	incomes.push_back(transaction);
-	incomeXML.appendTransactionToXML(transaction);
-}
+	
+	switch (transactionType) {
 
-void OperationManager::addExpense()
-{
-	system("cls");
-	Transaction transaction = gatherExpenseInfo();
-	expenses.push_back(transaction);
-	expenseXML.appendTransactionToXML(transaction);
+	case INCOME:
+		incomes.push_back(transaction);
+		incomeXML.appendTransactionToXML(transaction);
+		break;
+
+	case EXPENSE:
+		expenses.push_back(transaction);
+		expenseXML.appendTransactionToXML(transaction);
+		break;
+	}
 }
 
 void OperationManager::showBalance(timePeriod timePeriod)
