@@ -6,7 +6,7 @@
 #include <time.h>
 #include <iomanip>
 #include <chrono>
-#include "timePeriod.h"
+#include "VariationEnums.h"
 
 class OperationManager
 {

@@ -145,7 +145,7 @@
   <ItemGroup>
     <ClInclude Include="Accountant.h" />
     <ClInclude Include="AuxillaryFunctions.h" />
-    <ClInclude Include="timePeriod.h" />
+    <ClInclude Include="VariationEnums.h" />
     <ClInclude Include="OperationXML.h" />
     <ClInclude Include="OperationManager.h" />
     <ClInclude Include="tinystr.h" />

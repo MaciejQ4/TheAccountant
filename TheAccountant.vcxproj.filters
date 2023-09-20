@@ -92,7 +92,7 @@
     <ClInclude Include="Transaction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="timePeriod.h">
+    <ClInclude Include="VariationEnums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

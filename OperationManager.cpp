@@ -61,7 +61,6 @@ void OperationManager::showBalance(timePeriod timePeriod)
 			return;
 		}
 		break;
-
 	}
 	
 	incomes = incomeXML.uploadTransactionsFromXML(LOGGED_ID, startDate, endDate);
