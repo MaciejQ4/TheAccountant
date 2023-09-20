@@ -13,14 +13,14 @@ private:
 
 	const int LOGGED_ID;
 	
-	vector<Income> incomes;
+	vector<Transaction> incomes;
 	OperationXML incomeXML;
 	
-	vector<Expense> expenses;
+	vector<Transaction> expenses;
 	OperationXML expenseXML;
 
-	Income gatherIncomeInfo();
-	Expense gatherExpenseInfo();
+	Transaction gatherIncomeInfo();
+	Transaction gatherExpenseInfo();
 
 	void showIncomes();
 	void showExpenses();

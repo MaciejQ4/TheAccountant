@@ -4,17 +4,17 @@
 void OperationManager::addIncome()
 {
 	system("cls");
-	Income income = gatherIncomeInfo();
-	incomes.push_back(income);
-	incomeXML.appendTransactionToXML(income);
+	Transaction transaction = gatherIncomeInfo();
+	incomes.push_back(transaction);
+	incomeXML.appendTransactionToXML(transaction);
 }
 
 void OperationManager::addExpense()
 {
 	system("cls");
-	Expense expense = gatherExpenseInfo();
-	expenses.push_back(expense);
-	expenseXML.appendTransactionToXML(expense);
+	Transaction transaction = gatherExpenseInfo();
+	expenses.push_back(transaction);
+	expenseXML.appendTransactionToXML(transaction);
 }
 
 void OperationManager::showBalance(string timePeriod)
@@ -59,24 +59,24 @@ void OperationManager::showBalance(string timePeriod)
 		}
 	}
 
-	incomes = incomeXML.uploadIncomesFromXML(LOGGED_ID, startDate, endDate);
-	expenses = expenseXML.uploadExpensesFromXML(LOGGED_ID, startDate, endDate);
+	incomes = incomeXML.uploadTransactionsFromXML(LOGGED_ID, startDate, endDate);
+	expenses = expenseXML.uploadTransactionsFromXML(LOGGED_ID, startDate, endDate);
 
-	sort(incomes.begin(), incomes.end(), [](const Income& lhs, const Income& rhs) {
+	sort(incomes.begin(), incomes.end(), [](const Transaction& lhs, const Transaction& rhs) {
 		return lhs.getDate() < rhs.getDate(); });
 
-	sort(expenses.begin(), expenses.end(), [](const Expense& lhs, const Expense& rhs) {
+	sort(expenses.begin(), expenses.end(), [](const Transaction& lhs, const Transaction& rhs) {
 		return lhs.getDate() < rhs.getDate(); });
 
 	float sumOfIncomes = 0.00;
 
-	for (Income income : incomes)
-		sumOfIncomes += income.getAmount();
+	for (Transaction transaction : incomes)
+		sumOfIncomes += transaction.getAmount();
 
 	float sumOfExpenses = 0.00;
 
-	for (Expense expense : expenses)
-		sumOfExpenses += expense.getAmount();
+	for (Transaction transaction : expenses)
+		sumOfExpenses += transaction.getAmount();
 
 	system("cls");
 	showIncomes();
@@ -87,22 +87,22 @@ void OperationManager::showBalance(string timePeriod)
 
 	float balance = sumOfIncomes - sumOfExpenses;
 	cout << "******************* End balance: *******************" << endl << endl << endl;
-	cout << "Balance for the period: " << fixed << setprecision(2) << balance << endl << endl << endl;
+	cout << "Period Balace: " << fixed << setprecision(2) << balance << endl << endl << endl;
 	system("pause");
 }
 
-Income OperationManager::gatherIncomeInfo() {
+Transaction OperationManager::gatherIncomeInfo() {
 
-    Income income;
+	Transaction transaction;
 
-    income.setTransactionID(incomeXML.getIDofLastIncome() + 1);
-    income.setUserID(LOGGED_ID);
+	transaction.setTransactionID(incomeXML.getIDofLastTransaction() + 1);
+	transaction.setUserID(LOGGED_ID);
 
 	system("cls");
 	string itemInput = "";
 	cout << "Enter item: " << endl;
 	itemInput = AuxillaryFunctions::readLine();
-	income.setItem(itemInput);
+	transaction.setItem(itemInput);
 
 	string inputAmount = "";
 	do {
@@ -123,7 +123,7 @@ Income OperationManager::gatherIncomeInfo() {
 	};
 
 	float amountRounded = roundToTwoDecimalPlaces(amount);
-	income.setAmount(amountRounded);
+	transaction.setAmount(amountRounded);
 
 	char dayChoice;
 	bool flag = true;
@@ -133,7 +133,7 @@ Income OperationManager::gatherIncomeInfo() {
 		dayChoice = AuxillaryFunctions::readChar();
 
 		if (dayChoice == 'Y' || dayChoice == 'y') {
-			income.setDate(getTodaysDate());
+			transaction.setDate(getTodaysDate());
 			cout << "Transaction added succesfully with today's date. ";
 			system("pause");
 			flag = false;
@@ -150,7 +150,7 @@ Income OperationManager::gatherIncomeInfo() {
 		 
 			int date = AuxillaryFunctions::eraseDashesFromDate(inputDate);
 			
-			income.setDate(date);
+			transaction.setDate(date);
 			cout << "Transaction added succesfully with provided date. ";
 			system("pause");
 			flag = false;
@@ -159,21 +159,21 @@ Income OperationManager::gatherIncomeInfo() {
 		
 	} while (flag);
 
-    return income;
+    return transaction;
 }
 
-Expense OperationManager::gatherExpenseInfo() {
+Transaction OperationManager::gatherExpenseInfo() {
 
-	Expense expense;
+	Transaction transaction;
 
-	expense.setTransactionID(expenseXML.getIDofLastExpense() + 1);
-	expense.setUserID(LOGGED_ID);
+	transaction.setTransactionID(expenseXML.getIDofLastTransaction() + 1);
+	transaction.setUserID(LOGGED_ID);
 
 	system("cls");
 	string itemInput = "";
 	cout << "Enter item: " << endl;
 	itemInput = AuxillaryFunctions::readLine();
-	expense.setItem(itemInput);
+	transaction.setItem(itemInput);
 
 	string inputAmount = "";
 	do {
@@ -194,7 +194,7 @@ Expense OperationManager::gatherExpenseInfo() {
 	};
 
 	float amountRounded = roundToTwoDecimalPlaces(amount);
-	expense.setAmount(amountRounded);
+	transaction.setAmount(amountRounded);
 
 	char dayChoice;
 	bool flag = true;
@@ -204,7 +204,7 @@ Expense OperationManager::gatherExpenseInfo() {
 		dayChoice = AuxillaryFunctions::readChar();
 
 		if (dayChoice == 'Y' || dayChoice == 'y') {
-			expense.setDate(getTodaysDate());
+			transaction.setDate(getTodaysDate());
 			cout << "Transaction added succesfully with today's date. ";
 			system("pause");
 			flag = false;
@@ -221,7 +221,7 @@ Expense OperationManager::gatherExpenseInfo() {
 
 			int date = AuxillaryFunctions::eraseDashesFromDate(inputDate);
 
-			expense.setDate(date);
+			transaction.setDate(date);
 			cout << "Transaction added succesfully with provided date. ";
 			system("pause");
 			flag = false;
@@ -230,7 +230,7 @@ Expense OperationManager::gatherExpenseInfo() {
 
 	} while (flag);
 
-	return expense;
+	return transaction;
 }
 
 void OperationManager::showIncomes() {
@@ -239,14 +239,14 @@ void OperationManager::showIncomes() {
     if (incomes.empty())  cout << "No incomes in this time period. ";
 
     else {
-        cout << "********************* Incomes: **********************" << endl << endl;
-        for (Income income : incomes) {
+        cout << "********************* Incomes: **********************"	<< endl << endl;
+        for (Transaction transaction : incomes) {
             //cout << "Income ID: "      << income.getTransactionID() << endl;
             //cout << "User ID: " << income.getUserID()        << endl;
-			cout << "_________________" << endl;
-			cout << "Date: "    << AuxillaryFunctions::addDashesToDate (income.getDate())          << endl;
-            cout << "Item: "    << income.getItem()          << endl;
-            cout << "Amount: "  << income.getAmount()        << endl;
+			cout << "_________________"																	<< endl;
+			cout << "Date: "    << AuxillaryFunctions::addDashesToDate (transaction.getDate())          << endl;
+            cout << "Item: "    << transaction.getItem()												<< endl;
+            cout << "Amount: "  << fixed << setprecision(2) << transaction.getAmount()					<< endl;
         }
 		cout << "_________________";
 		cout << endl << endl << endl;
@@ -260,13 +260,13 @@ void OperationManager::showExpenses() {
 		
 	 else {
         cout << "******************** Expenses: *********************" << endl << endl;
-        for (Expense expense : expenses) {
+        for (Transaction transaction : expenses) {
             //cout << "Expense ID: "      << expense.getTransactionID() << endl;
             //cout << "User ID: " << expense.getUserID()        << endl;
-			cout << "_________________" << endl;
-			cout << "Date: " << AuxillaryFunctions::addDashesToDate(expense.getDate()) << endl;
-            cout << "Item: "    << expense.getItem()          << endl;
-            cout << "Amount: "  << expense.getAmount()        << endl;
+			cout << "_________________"																<< endl;
+			cout << "Date: "	<< AuxillaryFunctions::addDashesToDate(transaction.getDate())		<< endl;
+            cout << "Item: "    << transaction.getItem()											<< endl;
+            cout << "Amount: "  << fixed << setprecision(2) << transaction.getAmount()				<< endl;
         }
 		cout << "_________________";
 		cout << endl << endl << endl;

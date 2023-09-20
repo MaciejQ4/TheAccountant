@@ -1,25 +1,25 @@
 #include "OperationXML.h"
 
-int OperationXML::getIDofLastIncome() {
+int OperationXML::getIDofLastTransaction() {
 
-    return IDofLastIncome;
+    return IDofLastTransaction;
 }
-
+/*
 int OperationXML::getIDofLastExpense()
 {
-    return IDofLastExpense;
+    return IDofLastTransaction;
 }
-
-vector<Income> OperationXML::uploadIncomesFromXML(int LOGGED_ID, int startDate, int endDate)
+*/
+vector<Transaction> OperationXML::uploadTransactionsFromXML(int LOGGED_ID, int startDate, int endDate)
 {
-    vector<Income> incomes;
+    vector<Transaction> transactions;
     TiXmlDocument doc;
 
     if (doc.LoadFile(getFileName().c_str())) {
         TiXmlElement* root = doc.RootElement();
         if (!root) {
             cout << "Error: Root element not found in Income XML." << endl;
-            return incomes;
+            return transactions;
         }
 
         for (TiXmlElement* TransactionElement = root->FirstChildElement("Transaction"); TransactionElement; TransactionElement = TransactionElement->NextSiblingElement("Transaction")) {
@@ -64,9 +64,9 @@ vector<Income> OperationXML::uploadIncomesFromXML(int LOGGED_ID, int startDate, 
                     amount = stof(AmountText);
             }
 
-            if (TransactionID > IDofLastIncome) IDofLastIncome = TransactionID;
+            if (TransactionID > IDofLastTransaction) IDofLastTransaction = TransactionID;
             
-            Income transaction;
+            Transaction transaction;
             transaction.setTransactionID(TransactionID);
             transaction.setUserID(userID);
             transaction.setDate(date);
@@ -74,19 +74,19 @@ vector<Income> OperationXML::uploadIncomesFromXML(int LOGGED_ID, int startDate, 
             transaction.setAmount(amount);
 
             if (userID == LOGGED_ID && date >= startDate && date <= endDate) {
-                incomes.push_back(transaction);
+                transactions.push_back(transaction);
             }
         }
     }
     else {
         cout << "Error loading Income XML file." << endl;
     }
-    return incomes;
+    return transactions;
 }
-
-vector<Expense> OperationXML::uploadExpensesFromXML(int LOGGED_ID, int startDate, int endDate)
+/*
+vector<Transaction> OperationXML::uploadExpensesFromXML(int LOGGED_ID, int startDate, int endDate)
 {
-    vector<Expense> expenses;
+    vector<Transaction> expenses;
     TiXmlDocument doc;
 
     if (doc.LoadFile(getFileName().c_str())) {
@@ -138,10 +138,10 @@ vector<Expense> OperationXML::uploadExpensesFromXML(int LOGGED_ID, int startDate
                     amount = stof(AmountText);
             }
 
-            if (TransactionID > IDofLastExpense) IDofLastExpense = TransactionID;
+            if (TransactionID > IDofLastTransaction) IDofLastTransaction = TransactionID;
 
        
-                Expense transaction;
+                Transaction transaction;
                 transaction.setTransactionID(TransactionID);
                 transaction.setUserID(userID);
                 transaction.setDate(date);
@@ -154,11 +154,11 @@ vector<Expense> OperationXML::uploadExpensesFromXML(int LOGGED_ID, int startDate
         }
     }
     else {
-        std::cout << "Error loading Expense XML file." << std::endl;
+        cout << "Error loading Expense XML file." << endl;
     }
     return expenses;
 }
-
+*/
 void OperationXML::appendTransactionToXML(Transaction transaction)
 {
     TiXmlDocument doc;
@@ -191,7 +191,7 @@ void OperationXML::appendTransactionToXML(Transaction transaction)
         TransactionElement->LinkEndChild(AmountElement_Expense);
 
         doc.SaveFile(getFileName().c_str());
-        IDofLastIncome++;
+        IDofLastTransaction++;
     }
     else
     {
@@ -222,6 +222,6 @@ void OperationXML::appendTransactionToXML(Transaction transaction)
         TransactionElement->LinkEndChild(AmountElement_Expense);
 
         doc.SaveFile(getFileName().c_str());
-        IDofLastIncome++;
+        IDofLastTransaction++;
     }
 }

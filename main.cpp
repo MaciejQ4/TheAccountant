@@ -41,7 +41,7 @@ int main()
             cout << "2. Add expense"                            << endl << endl;
             cout << "3. Show this months balance"                       << endl;
             cout << "4. Show previous months balance"                   << endl;
-            cout << "5. Show balance in requested time period"  << endl << endl;
+            cout << "5. Show balance for requested time period" << endl << endl;
             cout << "6. Change password"                                << endl;
             cout << "7. Logout"                                         << endl;
 

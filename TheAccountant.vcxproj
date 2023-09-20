@@ -129,8 +129,6 @@
   <ItemGroup>
     <ClCompile Include="Accountant.cpp" />
     <ClCompile Include="AuxillaryFunctions.cpp" />
-    <ClCompile Include="Expense.cpp" />
-    <ClCompile Include="Income.cpp" />
     <ClCompile Include="OperationXML.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OperationManager.cpp" />
@@ -147,8 +145,6 @@
   <ItemGroup>
     <ClInclude Include="Accountant.h" />
     <ClInclude Include="AuxillaryFunctions.h" />
-    <ClInclude Include="Expense.h" />
-    <ClInclude Include="Income.h" />
     <ClInclude Include="OperationXML.h" />
     <ClInclude Include="OperationManager.h" />
     <ClInclude Include="tinystr.h" />

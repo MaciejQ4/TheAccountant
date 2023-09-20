@@ -51,16 +51,10 @@
     <ClCompile Include="OperationXML.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Expense.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OperationManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Transaction.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Income.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,16 +86,10 @@
     <ClInclude Include="OperationXML.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Expense.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OperationManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Transaction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Income.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
