@@ -5,7 +5,7 @@ int OperationXML::getIDofLastTransaction() {
     return IDofLastTransaction;
 }
 
-vector<Transaction> OperationXML::uploadTransactionsFromXML(int LOGGED_ID, int startDate, int endDate)
+vector<Transaction> OperationXML::uploadTransactionsFromXML(int LOGGED_ID)
 {
     vector<Transaction> transactions;
     TiXmlDocument doc;
@@ -68,9 +68,8 @@ vector<Transaction> OperationXML::uploadTransactionsFromXML(int LOGGED_ID, int s
             transaction.setItem(item);
             transaction.setAmount(amount);
 
-            if (userID == LOGGED_ID && date >= startDate && date <= endDate) {
-                transactions.push_back(transaction);
-            }
+            transactions.push_back(transaction);
+            
         }
     }
     else {

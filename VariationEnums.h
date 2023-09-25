@@ -1,12 +1,12 @@
 #pragma once
-enum timePeriod
+enum TimePeriod
 {
 	THIS_MONTH,
 	PREVIOUS_MONTH,
 	CUSTOM_PERIOD
 };
 
-enum transactionType
+enum TransactionType
 {
 	INCOME,
 	EXPENSE

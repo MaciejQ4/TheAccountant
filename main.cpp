@@ -8,17 +8,18 @@ using namespace std;
 
 int main()
 {
-    Accountant accountant("users", "incomes", "expenses");
+    Accountant accountant("users.xml", "incomes.xml", "expenses.xml");
 
     while (true) {
 
         if (accountant.isUserLogged() == false) {
 
         system("cls");
-        cout << ">>> ACCOUNTANT - MAIN MENU <<<"  << endl << endl;
+        cout << ">>> ACCOUNTANT - MAIN MENU <<<"         << endl << endl << endl;
         cout << "1. Create new User"                     << endl;
-        cout << "2. Login"                               << endl;
+        cout << "2. Login"                               << endl << endl;
         //cout << "3. Show all Users"                      << endl;
+        cout << "------------------------------"         << endl << endl;
         cout << "9. Close application"                   << endl;
 
         char choice = AuxillaryFunctions::readChar();
@@ -32,29 +33,31 @@ int main()
         default: cout << "Wrong input. "; system("pause");
         }
         }
-        //////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
         else {
 
             system("cls");
-            cout << ">>> USER MENU <<<"                           << endl << endl;
+            cout << ">>> USER MENU <<<"                                 << endl << endl << endl;
             cout << "1. Add income"                                     << endl;
-            cout << "2. Add expense"                            << endl << endl;
+            cout << "2. Add expense"                                    << endl << endl;
+            cout << "-----------------------------------------"         << endl << endl;
             cout << "3. Show this months balance"                       << endl;
             cout << "4. Show previous months balance"                   << endl;
-            cout << "5. Show balance for requested time period" << endl << endl;
+            cout << "5. Show balance for requested time period"         << endl << endl;
+            cout << "-----------------------------------------"         << endl << endl;
             cout << "6. Change password"                                << endl;
             cout << "7. Logout"                                         << endl;
 
             char choice = AuxillaryFunctions::readChar();
             switch (choice) {
 
-            case '1': accountant.createTransaction(INCOME);                    break;
-            case '2': accountant.createTransaction(EXPENSE);                   break;
+            case '1': accountant.createTransaction(INCOME);       break;
+            case '2': accountant.createTransaction(EXPENSE);      break;
             case '3': accountant.showBalance(THIS_MONTH);         break;
             case '4': accountant.showBalance(PREVIOUS_MONTH);     break;
             case '5': accountant.showBalance(CUSTOM_PERIOD);      break;
-            case '6': accountant.changePassword();                  break;
-            case '7': accountant.logOut();                          break;
+            case '6': accountant.changePassword();                break;
+            case '7': accountant.logOut();                        break;
 
             default: cout << "Wrong input. "; system("pause");
             }

@@ -23,12 +23,12 @@ void Accountant::showAllUsers() {
 	userManager.showAllUsers();
 }
 
-void Accountant::createTransaction(transactionType transactionType) {
+void Accountant::createTransaction(TransactionType transactionType) {
 
 	operationManager->addTransaction(transactionType);
 }
 
-void Accountant::showBalance(timePeriod timePeriod) {
+void Accountant::showBalance(TimePeriod timePeriod) {
 
 	operationManager->showBalance(timePeriod);
 }

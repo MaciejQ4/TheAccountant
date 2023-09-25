@@ -17,7 +17,7 @@ public:
 	};
 
 	int getIDofLastTransaction();
-	vector<Transaction> uploadTransactionsFromXML(int LOGGED_ID, int startDate, int endDate);
+	vector<Transaction> uploadTransactionsFromXML(int LOGGED_ID);
 	void appendTransactionToXML(Transaction transaction);
 };
 

@@ -31,26 +31,7 @@ char AuxillaryFunctions::readChar() {
 string AuxillaryFunctions::addDashesToDate(int date) {
 
     string dateString = to_string(date);
-
-    char dateArray[10];
-
-    dateArray[0] = dateString[0];
-    dateArray[1] = dateString[1];
-    dateArray[2] = dateString[2];
-    dateArray[3] = dateString[3];
-    dateArray[4] = '-';
-    dateArray[5] = dateString[4];
-    dateArray[6] = dateString[5];
-    dateArray[7] = '-';
-    dateArray[8] = dateString[6];
-    dateArray[9] = dateString[7];
-
-    string dateStringModified = "";
-
-    for (size_t i = 0; i < 10; i++)
-        dateStringModified += dateArray[i];
-
-    //string dateStringModified = dateString.substr(0, 4) + '-' + dateString.substr(4, 2) + '-' + dateString.substr(6, 2);
+    string dateStringModified = dateString.substr(0, 4) + '-' + dateString.substr(4, 2) + '-' + dateString.substr(6, 2);
     return dateStringModified;
 }
 
@@ -222,7 +203,7 @@ bool AuxillaryFunctions::checkDateFormat(string userInputDate)
 
 	string dateString = yearString + monthString + dayString;
 	int date = stoi(dateString);
-	if (date > getTodaysDate()) {						   // check if inputed date isnt a future date
+	if (date > getTodaysDate()) {						      // check if inputed date isnt a future date
 		cout << "Can't input future date. " << endl;
 		return false;
 	}
@@ -239,10 +220,6 @@ bool AuxillaryFunctions::checkAmountFormat(string inputAmount)
 		}
 	}
 
-	for (size_t i = 0; i < inputAmount.size(); i++) {		  // change all commas to dots
-		if (inputAmount[i] == ',') inputAmount[i] = '.';
-	}
-
 	int dotCounter = 0;
 	for (size_t i = 0; i < inputAmount.size(); i++) {		  // check string for too many dots
 		if (inputAmount[i] == '.') dotCounter++;
@@ -254,21 +231,21 @@ bool AuxillaryFunctions::checkAmountFormat(string inputAmount)
 		return false;
 	}
 
-	int dotPlace = 0;
+	int dotPosition = 0;
 	for (size_t i = 0; i < inputAmount.size(); i++) {
-		if (inputAmount[i] == '.') dotPlace = i;
+		if (inputAmount[i] == '.') dotPosition = i;
 	}
 
 	for (size_t i = 0; i < inputAmount.size(); i++) {
 		char ch = inputAmount[i];
-		if (i == dotPlace && ch == '0') {
+		if (i == dotPosition && ch == '0') {
 			cout << "Wrong input format. Leading zeros not allowed. " << endl;
 			system("pause");
 			return false;
 		}
 	}
 
-	if ((inputAmount.size() - dotPlace > 3) && dotPlace != 0) {
+	if ((inputAmount.size() - dotPosition > 3) && dotPosition != 0) {
 		cout << "Wrong input format. More than two decimal places not allowed. ";
 		system("pause");
 		return false;
